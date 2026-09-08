@@ -10,8 +10,8 @@ export const CONTACT_INFO = {
   company: "ESAAS Technologies Private Limited",
   address:
     "2nd Floor, WeWork Salarpuria Symbiosis, Bannerghatta Road, Arekere Village, Bengaluru, Karnataka 560076",
-  phone: "+91-9538733737",
-  whatsapp: "919538733737",
+  phone: "+91-8123733737",
+  whatsapp: "918123733737",
   whatsappDefaultMessage:
     "Hi EXCRO team, I'd like to learn more about your escrow services.",
   sales: "sales@excro.in",
