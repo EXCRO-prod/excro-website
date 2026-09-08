@@ -1,30 +1,36 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
 import { DashboardMockup } from "@/components/DashboardMockup";
+import { Button } from "@/components/ui/Button";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { FloatingOrbs } from "@/components/ui/FloatingOrbs";
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="hero-grid relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24">
-      <div className="container-max px-6 md:px-12 lg:px-20">
+    <section id="page-hero" className="page-hero hero-grid relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+        <FloatingOrbs />
+        <div className="absolute -top-40 right-0 h-96 w-96 rounded-full bg-blue-100/40 blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-blue-100/25 blur-3xl" />
+      </div>
+      <div className="container-max relative z-10">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <FadeIn>
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-light-blue px-4 py-1.5">
                 <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                 <span className="text-sm font-medium text-primary">
-                  API-Powered Escrow Infrastructure
+                  SaaS Platform for Banks and Businesses
                 </span>
               </div>
             </FadeIn>
 
             <FadeIn delay={0.1}>
               <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-[64px]">
-                Escrow Infrastructure for{" "}
-                <span className="gradient-text">Secure Digital Transactions</span>
+                API Powered Escrows for{" "}
+                <span className="gradient-text">Businesses and Individuals</span>
               </h1>
             </FadeIn>
 
@@ -37,11 +43,11 @@ export function Hero() {
 
             <FadeIn delay={0.3}>
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Button variant="primary" size="lg" href="#audit">
+                <Button variant="primary" size="lg" href="/contact">
                   Book a Demo
                   <ArrowRight className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="lg" href="#audit">
+                <Button variant="outline" size="lg" href="/contact">
                   <Play className="h-4 w-4" />
                   Talk to an Expert
                 </Button>
@@ -77,9 +83,6 @@ export function Hero() {
           </FadeIn>
         </div>
       </div>
-
-      <div className="pointer-events-none absolute -top-40 right-0 h-96 w-96 rounded-full bg-blue-100/40 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-blue-50 blur-3xl" />
     </section>
   );
 }

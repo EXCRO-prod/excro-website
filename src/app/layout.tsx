@@ -9,7 +9,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "EXCRO — Escrow Infrastructure for Secure Digital Transactions",
+  title: {
+    default: "EXCRO — Escrow Infrastructure for Secure Digital Transactions",
+    template: "%s | EXCRO",
+  },
   description:
     "Protect payments with API-powered escrow, milestone-based releases, vendor payouts, and automated reconciliation. Enterprise-grade escrow infrastructure.",
   keywords: [
@@ -34,7 +37,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} h-full scroll-smooth antialiased`}>
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full bg-white font-sans text-foreground">{children}</body>
     </html>
   );

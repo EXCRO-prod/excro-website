@@ -1,14 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { NAV_LINKS } from "@/lib/constants";
+import { Logo } from "@/components/ui/Logo";
+import { ServicesDropdown } from "@/components/ServicesDropdown";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -16,40 +21,74 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
+
   return (
     <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass shadow-sm py-3" : "bg-transparent py-5"
+        scrolled ? "glass shadow-sm py-3" : "bg-white/80 py-5"
       }`}
     >
-      <div className="container-max flex items-center justify-between px-6 md:px-12 lg:px-20">
-        <a href="#" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white">
-            E
-          </div>
-          <span className="text-xl font-bold tracking-tight text-foreground">EXCRO</span>
-        </a>
+      <div className="container-max flex items-center justify-between px-6 md:px-12 lg:px-4">
+        <Link href="/" scroll={true} className="flex items-center gap-2">
+          <Image src="/logo.svg" alt="EXCRO" width={170} height={170} />
+        </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-sm font-medium text-muted transition-colors hover:text-primary"
-            >
-              {link.label}
-            </a>
-          ))}
+        <nav className="hidden items-center gap-6 lg:flex">
+          <Link
+            href="/"
+            scroll={true}
+            className={`text-sm font-medium transition-colors ${
+              isActive("/") ? "text-primary" : "text-muted hover:text-primary"
+            }`}
+          >
+            Home
+          </Link>
+          <Link
+            href="/about"
+            scroll={true}
+            className={`text-sm font-medium transition-colors ${
+              isActive("/about") ? "text-primary" : "text-muted hover:text-primary"
+            }`}
+          >
+            About
+          </Link>
+          <ServicesDropdown />
+          <Link
+            href="/api-powered-escrow"
+            scroll={true}
+            className={`text-sm font-medium transition-colors ${
+              isActive("/api-powered-escrow") ? "text-primary" : "text-muted hover:text-primary"
+            }`}
+          >
+            API Powered Escrow
+          </Link>
+          <Link
+            href="/contact"
+            scroll={true}
+            className={`text-sm font-medium transition-colors ${
+              isActive("/contact") ? "text-primary" : "text-muted hover:text-primary"
+            }`}
+          >
+            Contact
+          </Link>
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Button variant="ghost" size="sm" href="#audit">
+          {/* <Button variant="ghost" size="sm" href="/contact">
             Talk to an Expert
-          </Button>
-          <Button variant="primary" size="sm" href="#audit">
+          </Button> */}
+          <Button variant="primary" size="sm" href="/contact">
             Book a Demo
           </Button>
         </div>
@@ -71,21 +110,40 @@ export function Navbar() {
           className="glass border-t border-slate-100 px-6 py-6 lg:hidden"
         >
           <nav className="flex flex-col gap-4">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-base font-medium text-muted"
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
+            <Link
+              href="/"
+              scroll={true}
+              className={`text-base font-medium ${isActive("/") ? "text-primary" : "text-muted"}`}
+            >
+              Home
+            </Link>
+            <Link
+              href="/about"
+              scroll={true}
+              className={`text-base font-medium ${isActive("/about") ? "text-primary" : "text-muted"}`}
+            >
+              About
+            </Link>
+            <ServicesDropdown variant="mobile" onNavigate={() => setMobileOpen(false)} />
+            <Link
+              href="/api-powered-escrow"
+              scroll={true}
+              className={`text-base font-medium ${isActive("/api-powered-escrow") ? "text-primary" : "text-muted"}`}
+            >
+              API Powered Escrow
+            </Link>
+            <Link
+              href="/contact"
+              scroll={true}
+              className={`text-base font-medium ${isActive("/contact") ? "text-primary" : "text-muted"}`}
+            >
+              Contact
+            </Link>
             <div className="mt-4 flex flex-col gap-3">
-              <Button variant="outline" href="#audit">
+              <Button variant="outline" href="/contact">
                 Talk to an Expert
               </Button>
-              <Button variant="primary" href="#audit">
+              <Button variant="primary" href="/contact">
                 Book a Demo
               </Button>
             </div>

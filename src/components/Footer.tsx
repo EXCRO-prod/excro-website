@@ -1,45 +1,55 @@
-import { NAV_LINKS } from "@/lib/constants";
+import Link from "next/link";
+import { Logo } from "@/components/ui/Logo";
+import { CONTACT_INFO, NAV_LINKS } from "@/lib/constants";
 
 export function Footer() {
   return (
-    <footer className="border-t border-slate-100 bg-white py-16">
+    <footer className="section-padding border-t border-slate-100 bg-white">
       <div className="container-max px-6 md:px-12 lg:px-20">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
-            <div className="mb-4 flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white">
-                E
-              </div>
-              <span className="text-xl font-bold tracking-tight text-foreground">EXCRO</span>
-            </div>
+            <Link href="/" scroll={true} className="mb-4 inline-flex items-center">
+              <Logo className="h-9 w-auto" />
+            </Link>
             <p className="text-sm leading-relaxed text-muted">
               API-powered escrow infrastructure for secure digital transactions.
             </p>
           </div>
 
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-foreground">Product</h4>
+            <h4 className="mb-4 text-sm font-semibold text-foreground">Services</h4>
             <ul className="space-y-3">
-              {["Digital Escrow", "API Integration", "Settlement Engine", "Reconciliation"].map(
-                (item) => (
-                  <li key={item}>
-                    <a href="#solutions" className="text-sm text-muted hover:text-primary">
-                      {item}
-                    </a>
-                  </li>
-                ),
-              )}
+              <li>
+                <Link href="/our-services" className="text-sm text-muted hover:text-primary">
+                  Our Services
+                </Link>
+              </li>
+              <li>
+                <Link href="/api-powered-escrow" className="text-sm text-muted hover:text-primary">
+                  API Powered Escrow
+                </Link>
+              </li>
+              <li>
+                <Link href="/our-services" className="text-sm text-muted hover:text-primary">
+                  SaaS Platform
+                </Link>
+              </li>
+              <li>
+                <Link href="/our-services" className="text-sm text-muted hover:text-primary">
+                  Global Escrows
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
             <h4 className="mb-4 text-sm font-semibold text-foreground">Company</h4>
             <ul className="space-y-3">
-              {NAV_LINKS.slice(4).map((link) => (
+              {NAV_LINKS.filter((l) => l.label !== "Home").map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="text-sm text-muted hover:text-primary">
+                  <Link href={link.href} className="text-sm text-muted hover:text-primary">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -48,8 +58,16 @@ export function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-semibold text-foreground">Contact</h4>
             <ul className="space-y-3 text-sm text-muted">
-              <li>hello@excro.in</li>
-              <li>+91 80 1234 5678</li>
+              <li>
+                <a href={`mailto:${CONTACT_INFO.sales}`} className="hover:text-primary">
+                  {CONTACT_INFO.sales}
+                </a>
+              </li>
+              <li>
+                <a href={`tel:${CONTACT_INFO.phone}`} className="hover:text-primary">
+                  {CONTACT_INFO.phone}
+                </a>
+              </li>
               <li>Bengaluru, India</li>
             </ul>
           </div>
@@ -60,15 +78,15 @@ export function Footer() {
             © {new Date().getFullYear()} EXCRO. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-muted">
-            <a href="#" className="hover:text-primary">
+            <Link href="/privacy-policy" className="hover:text-primary">
               Privacy Policy
-            </a>
-            <a href="#" className="hover:text-primary">
+            </Link>
+            <Link href="/terms-and-conditions" className="hover:text-primary">
               Terms of Service
-            </a>
-            <a href="#" className="hover:text-primary">
-              Security
-            </a>
+            </Link>
+            <Link href="/contact" className="hover:text-primary">
+              Contact
+            </Link>
           </div>
         </div>
       </div>
