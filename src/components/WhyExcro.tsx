@@ -24,8 +24,8 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 export function WhyExcro() {
   return (
-    <section className="section-padding bg-slate-50/50">
-      <div className="container-max">
+    <section className="section-padding section-surface-alt">
+      <div className="container-max pt-5">
         <SectionHeader
           label="Why EXCRO"
           title="Why Choose EXCRO?"

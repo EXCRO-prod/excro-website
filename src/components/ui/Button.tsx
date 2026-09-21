@@ -6,7 +6,7 @@ import { type ReactNode } from "react";
 
 interface ButtonProps {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "inverse";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "inverse" | "whatsapp";
   size?: "sm" | "md" | "lg";
   href?: string;
   onClick?: () => void;
@@ -20,6 +20,7 @@ const variants = {
   outline: "border border-slate-200 bg-white text-foreground hover:border-primary/30 hover:bg-light-blue/50",
   ghost: "text-muted hover:text-primary hover:bg-light-blue/50",
   inverse: "border border-white/40 bg-white/10 text-white hover:border-white/70 hover:bg-white/20 hover:text-white",
+  whatsapp: "bg-[#25D366] text-white hover:bg-[#1ebe57] shadow-lg shadow-[#25D366]/30",
 };
 
 const sizes = {

@@ -1,6 +1,7 @@
 "use client";
 
 import { ServiceVisual } from "@/components/ServiceVisual";
+import { Button } from "@/components/ui/Button";
 import { GlowCard } from "@/components/ui/GlowCard";
 import {
   BookOpen,
@@ -10,6 +11,7 @@ import {
   RefreshCw,
   UserCheck,
   Wallet,
+  ArrowRight,
   type LucideIcon,
 } from "lucide-react";
 
@@ -49,6 +51,15 @@ export function ServiceCard({ title, description, icon, image, slug, index }: Se
           </div>
           <h2 className="text-2xl font-bold text-foreground">{title}</h2>
           <p className="mt-4 leading-relaxed text-muted">{description}</p>
+          <Button
+            variant="outline"
+            size="sm"
+            href={`/our-services#${slug}`}
+            className="mt-6"
+          >
+            Learn More
+            <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
         <div className={!isEven ? "md:order-1" : ""}>
           <ServiceVisual icon={icon} image={image} title={title} />

@@ -60,7 +60,7 @@ function StepConnector() {
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="section-padding bg-slate-50/50">
+    <section id="how-it-works" className="section-padding section-surface-alt">
       <div className="container-max">
         <SectionHeader
           label="How It Works"

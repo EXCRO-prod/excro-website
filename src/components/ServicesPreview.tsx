@@ -30,8 +30,8 @@ export function ServicesPreview() {
   const preview = SERVICES_DETAILED.slice(0, 3);
 
   return (
-    <section className="section-padding">
-      <div className="container-max">
+    <section className="section-padding section-surface">
+      <div className="container-max pt-5">
         <SectionHeader
           label="Our Services"
           title="Company chain expertise"

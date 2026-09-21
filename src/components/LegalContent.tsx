@@ -18,7 +18,7 @@ export function LegalContent({ intro, sections, icon = "terms" }: LegalContentPr
   const Icon = icon === "privacy" ? Shield : FileText;
 
   return (
-    <section className="section-padding">
+    <section className="section-padding section-surface">
       <div className="container-max">
         <div className="grid gap-12 lg:grid-cols-4">
           <FadeIn className="lg:col-span-1">

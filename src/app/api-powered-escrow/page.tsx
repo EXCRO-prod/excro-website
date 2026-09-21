@@ -51,7 +51,7 @@ export default function ApiPoweredEscrowPage() {
 
       {/* <StatsStrip /> */}
 
-      <section className="section-padding">
+      <section className="section-padding section-surface">
         <div className="container-max">
           <FadeIn>
             <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-slate-100 bg-gradient-to-br from-light-blue/50 to-white p-10 text-center">
@@ -68,7 +68,7 @@ export default function ApiPoweredEscrowPage() {
 
       <EscrowFlowDiagram />
 
-      <section className="section-padding bg-slate-50/50">
+      <section className="section-padding section-surface">
         <div className="container-max">
           <FadeIn>
             <h2 className="section-title text-center text-3xl font-bold text-foreground">
@@ -94,7 +94,7 @@ export default function ApiPoweredEscrowPage() {
         </div>
       </section>
 
-      <section className="section-padding">
+      <section className="section-padding section-surface-alt">
         <div className="container-max">
           <FadeIn>
             <h2 className="section-title text-center text-3xl font-bold text-foreground">
@@ -126,7 +126,7 @@ export default function ApiPoweredEscrowPage() {
         </div>
       </section>
 
-      <section className="section-padding bg-slate-50/50">
+      <section className="section-padding section-surface">
         <div className="container-max">
           <FadeIn>
             <h2 className="section-title text-center text-3xl font-bold text-foreground">

@@ -7,7 +7,7 @@ import { ArrowRight, FileText, MessageCircle, Sparkles } from "lucide-react";
 
 export function FinalCTA() {
   return (
-    <section className="section-padding">
+    <section className="section-padding section-surface">
       <div className="container-max">
         <FadeIn>
           <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-16 text-center md:px-16 md:py-24">

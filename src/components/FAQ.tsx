@@ -11,8 +11,8 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="section-padding bg-slate-50/50">
-      <div className="container-max">
+    <section id="faq" className="section-padding section-surface">
+      <div className="container-max pt-5">
         <SectionHeader
           label="FAQ"
           title="Get every single answer"

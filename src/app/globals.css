@@ -141,7 +141,11 @@ body {
 }
 
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 40s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 
 .animate-float {
@@ -179,6 +183,14 @@ body {
 
 .section-title {
   @apply mb-10 lg:mb-12;
+}
+
+.section-surface {
+  @apply bg-white;
+}
+
+.section-surface-alt {
+  @apply bg-slate-50;
 }
 
 .container-max {

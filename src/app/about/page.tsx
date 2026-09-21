@@ -42,7 +42,7 @@ export default function AboutPage() {
 
       <StatsStrip />
 
-      <section className="section-padding">
+      <section className="section-padding section-surface">
         <div className="container-max">
           <div className="grid gap-16 lg:grid-cols-2">
             <FadeIn>
@@ -59,12 +59,12 @@ export default function AboutPage() {
 
             <FadeIn delay={0.1}>
               <GlowCard className="bg-light-blue/30">
-                <h3 className="mb-3 text-lg font-bold text-foreground">Our Story</h3>
+                <h3 className="mb-3 text-lg font-bold text-foreground pt-5">Our Story</h3>
                 <p className="text-sm leading-relaxed text-muted">
                   Founded in 2022 by experts blending deep banking knowledge with fintech innovation,
                   EXCRO was built to merge trust and technology with a programmable escrow core.
                 </p>
-                <h3 className="mb-3 mt-6 text-lg font-bold text-foreground">Our Mission</h3>
+                <h3 className="mb-3 mt-6 text-lg font-bold text-foreground pt-5">Our Mission</h3>
                 <p className="text-sm leading-relaxed text-muted">
                   To orchestrate a new era of unified financial innovation—empowering businesses to
                   move money with confidence, clarity, and control.
@@ -75,19 +75,19 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section-padding bg-slate-50/50">
+      <section className="section-padding section-surface-alt">
         <div className="container-max">
           <FadeIn>
-            <h2 className="section-title text-center text-3xl font-bold text-foreground">Our Journey</h2>
+            <h2 className="section-title text-center text-3xl font-bold text-foreground pt-5">Our Journey</h2>
           </FadeIn>
           <Timeline items={TIMELINE} />
         </div>
       </section>
 
-      <section className="section-padding">
+      <section className="section-padding section-surface">
         <div className="container-max">
           <FadeIn>
-            <h2 className="section-title text-center text-3xl font-bold text-foreground">What We Do</h2>
+            <h2 className="section-title text-center text-3xl font-bold text-foreground pt-5">What We Do</h2>
           </FadeIn>
           <div className="grid gap-6 sm:grid-cols-2">
             {WHAT_WE_DO.map((item, i) => (
@@ -97,10 +97,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section-padding bg-slate-50/50">
+      <section className="section-padding section-surface-alt">
         <div className="container-max">
-          <div className="grid gap-12 lg:grid-cols-2">
-            <FadeIn>
+          <div className="grid gap-12 lg:grid-cols-2 pt-5 md:pt-10">
+            <FadeIn className="px-3 md:px-0">
               <h2 className="text-3xl font-bold text-foreground">Our Vision for the Future</h2>
               <p className="mt-4 text-muted">
                 EXCRO is building the future of payments with embedded escrow, cross-border flows,

@@ -6,12 +6,43 @@ import { ESCROW_PROBLEMS, ESCROW_SOLUTIONS } from "@/lib/constants";
 import { motion } from "framer-motion";
 import { AlertTriangle, ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 export function WhatIsEscrow() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.muted = false;
+          void video.play().catch(() => {
+            video.muted = true;
+            void video.play().catch(() => undefined);
+          });
+        } else {
+          video.pause();
+          video.muted = true;
+        }
+      },
+      { threshold: 0.25 },
+    );
+
+    observer.observe(video);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="section-padding relative overflow-hidden">
+    <section className="section-padding section-surface relative overflow-hidden">
       <div className="pointer-events-none absolute right-0 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-blue-50 blur-3xl" />
-      <div className="container-max relative">
+      <div className="container-max relative pt-5">
         <SectionHeader
           label="What is Escrow?"
           title="Trust is fragile. Escrow makes it secure."
@@ -66,6 +97,20 @@ export function WhatIsEscrow() {
               ))}
             </ul>
           </GlowCard>
+        </div>
+
+        <div className="mx-auto mt-12 max-w-4xl overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-lg shadow-blue-100/40">
+          <video
+            ref={videoRef}
+            className="aspect-video w-full object-cover"
+            src="/excro_highlight.mp4"
+            muted
+            loop
+            controls
+            playsInline
+            preload="metadata"
+            aria-label="Excro escrow platform highlight"
+          />
         </div>
 
         <motion.div

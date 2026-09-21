@@ -53,7 +53,7 @@ function FlowStep({ step, index }: { step: typeof STEPS[number]; index: number }
 
 export function EscrowFlowDiagram() {
   return (
-    <section className="section-padding">
+    <section className="section-padding section-surface-alt">
       <div className="container-max">
         <FadeIn>
           <div className="relative overflow-hidden rounded-3xl border border-slate-100 bg-gradient-to-br from-white to-light-blue/30 p-8 md:p-12">

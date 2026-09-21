@@ -24,8 +24,8 @@ const TESTIMONIALS = [
 
 export function TestimonialsStrip() {
   return (
-    <section className="section-padding overflow-hidden bg-slate-50/50">
-      <div className="container-max">
+    <section className="section-padding section-surface-alt overflow-hidden">
+      <div className="container-max pt-5">
         <FadeIn>
           <p className="section-title text-center text-sm font-semibold uppercase tracking-widest text-primary">
             What Clients Say

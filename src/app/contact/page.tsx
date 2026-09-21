@@ -23,7 +23,7 @@ export default function ContactPage() {
         pills={["< 24hr response", "24×7 support", "Free consultation"]}
       />
 
-      <section className="section-padding">
+      <section className="section-padding section-surface">
         <div className="container-max">
           <ContactHighlights />
 

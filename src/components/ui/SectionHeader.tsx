@@ -1,7 +1,9 @@
 "use client";
 
+import { GsapTextReveal } from "@/components/animations/GsapTextReveal";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { motion } from "framer-motion";
-import { type ReactNode } from "react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
 
 interface SectionHeaderProps {
   label: string;
@@ -17,23 +19,46 @@ export function SectionHeader({
   align = "center",
 }: SectionHeaderProps) {
   const alignClass = align === "center" ? "text-center mx-auto" : "";
+  const ref = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion() || !ref.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from("[data-section-meta]", {
+        y: 20,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ref.current,
+          start: "top 90%",
+        },
+      });
+    }, ref);
+
+    return () => ctx.revert();
+  }, [description]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className={`section-title max-w-2xl ${alignClass}`}
-    >
-      <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-light-blue px-4 py-1.5 text-sm font-semibold text-primary">
+    <div ref={ref} className={`section-title max-w-2xl ${alignClass}`}>
+      <span
+        data-section-meta
+        className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-light-blue px-4 py-1.5 text-sm font-semibold text-primary"
+      >
         <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
         {label}
       </span>
       <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground md:text-5xl">
-        {title}
+        <GsapTextReveal as="span" text={title} delay={0.05} />
       </h2>
-      {description && <p className="mt-4 text-lg text-muted">{description}</p>}
-    </motion.div>
+      {description && (
+        <p data-section-meta className="mt-4 text-lg text-muted">
+          {description}
+        </p>
+      )}
+    </div>
   );
 }
 

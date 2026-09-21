@@ -21,12 +21,12 @@ export default function OurServicesPage() {
         title="Our Services"
         description="Comprehensive escrow infrastructure for banks, enterprises, and platforms."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Our Services" }]}
-        pills={["7 Core Services", "API-first", "Enterprise ready"]}
+        pills={["8 Core Services", "API-first", "Enterprise ready"]}
       />
 
       {/* <StatsStrip /> */}
 
-      <section className="section-padding">
+      <section className="section-padding section-surface">
         <div className="container-max">
           <div className="grid gap-10">
             {SERVICES_DETAILED.map((service, i) => (

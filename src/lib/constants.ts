@@ -105,6 +105,15 @@ export const SERVICES_DETAILED = [
       "https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=800&auto=format&fit=crop&q=80",
   },
   {
+    slug: "treasury-cash-management",
+    title: "Treasury & Cash Management",
+    description:
+      "Real-time treasury operations for banks and enterprises, unifying cash visibility, reconciliation, and controlled disbursements into one API-driven layer. Built on Excro's ledger, reconciliation, and escrow infrastructure, it gives corporates a single view of balances and flows while letting banks reduce manual treasury ops. Funds stay in regulated accounts; Excro orchestrates visibility, matching, and release — bringing bank-grade control to modern treasury without building new core infrastructure.",
+    icon: "Landmark",
+    image:
+      "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&auto=format&fit=crop&q=80",
+  },
+  {
     slug: "kyc-validation",
     title: "KYC Validation",
     description:

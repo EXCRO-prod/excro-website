@@ -8,7 +8,7 @@ interface LogoProps {
 export function Logo({ className = "h-9 w-auto md:h-10", priority = false }: LogoProps) {
   return (
     <Image
-      src="/logo.png"
+      src="/logo.svg"
       alt="EXCRO"
       width={170}
       height={40}
