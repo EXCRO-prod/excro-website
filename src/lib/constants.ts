@@ -2,6 +2,7 @@ export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Our Services", href: "/our-services" },
+  { label: "Blog", href: "/blog" },
   { label: "API Powered Escrow", href: "/api-powered-escrow" },
   { label: "Contact", href: "/contact" },
 ];

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
+import { BlogDropdown } from "@/components/BlogDropdown";
 import { Logo } from "@/components/ui/Logo";
 import { ServicesDropdown } from "@/components/ServicesDropdown";
 import { motion } from "framer-motion";
@@ -64,15 +65,7 @@ export function Navbar() {
             About
           </Link>
           <ServicesDropdown />
-          <Link
-            href="/api-powered-escrow"
-            scroll={true}
-            className={`text-sm font-medium transition-colors ${
-              isActive("/api-powered-escrow") ? "text-primary" : "text-muted hover:text-primary"
-            }`}
-          >
-            API Powered Escrow
-          </Link>
+          <BlogDropdown />
           <Link
             href="/contact"
             scroll={true}
@@ -125,13 +118,7 @@ export function Navbar() {
               About
             </Link>
             <ServicesDropdown variant="mobile" onNavigate={() => setMobileOpen(false)} />
-            <Link
-              href="/api-powered-escrow"
-              scroll={true}
-              className={`text-base font-medium ${isActive("/api-powered-escrow") ? "text-primary" : "text-muted"}`}
-            >
-              API Powered Escrow
-            </Link>
+            <BlogDropdown variant="mobile" onNavigate={() => setMobileOpen(false)} />
             <Link
               href="/contact"
               scroll={true}
