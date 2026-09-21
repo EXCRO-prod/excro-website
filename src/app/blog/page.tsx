@@ -93,7 +93,7 @@ export default function BlogPage() {
         </div>
       </section>
 
-      <section className="section-padding section-surface-alt">
+     {/* <section className="section-padding section-surface-alt">
         <div className="container-max space-y-6">
           <FadeIn>
             <article id="rera-accounts" className="scroll-mt-28 rounded-2xl border border-slate-200 bg-white p-8 md:p-10">
@@ -115,7 +115,7 @@ export default function BlogPage() {
             </article>
           </FadeIn>
         </div>
-      </section>
+      </section> */}
     </SiteShell>
   );
 }
