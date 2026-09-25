@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* The escrow platform (escrow/) has its own styles; keep Tailwind from scanning it. */
+@source not "../../escrow";
 
 :root {
   --background: #ffffff;
@@ -196,3 +198,75 @@ body {
 .container-max {
   @apply mx-auto max-w-7xl;
 }
+
+/* ---------------------------------------------------------------------------------------------
+   Dark theme. Set by <html data-theme="dark"> (see app/layout.tsx; toggled in the navbar).
+   Components keep their light-mode classes: the surface/border palette entries they use are
+   re-pointed here, so every section follows without per-component dark: variants. Colours used
+   as TEXT on the blue brand sections (blue-100, green-100, slate-300, white) are deliberately
+   left alone. New components can still opt in with Tailwind's `dark:` variant.
+   --------------------------------------------------------------------------------------------- */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0b1120;
+  --foreground: #e2e8f0;
+  --primary: #3b82f6;
+  --secondary: #60a5fa;
+  --light-blue: #13213d;
+  --accent: #93c5fd;
+  --muted: #94a3b8;
+  --success: #4ade80;
+  --surface: #111a2e;
+
+  /* Palette entries only ever used as backgrounds or borders on this site. */
+  --color-slate-50: #0f172a;
+  --color-slate-100: #1e293b;
+  --color-slate-200: #273449;
+  --color-blue-50: #13213d;
+  --color-green-50: #0f2a1c;
+  --color-red-50: #2f1215;
+  --color-red-100: #3f1519;
+  --color-sky-50: #0c1e33;
+  --color-sky-100: #0c2a44;
+  --color-indigo-50: #1e1b4b;
+}
+
+[data-theme="dark"] .bg-white,
+[data-theme="dark"] .section-surface,
+[data-theme="dark"] .gradient-border { background-color: var(--surface); }
+[data-theme="dark"] .gradient-border { background: var(--surface); }
+[data-theme="dark"] .bg-white\/90 { background-color: rgb(17 26 46 / 0.9); }
+[data-theme="dark"] .bg-white\/80 { background-color: rgb(11 17 32 / 0.8); }
+[data-theme="dark"] .from-white { --tw-gradient-from: var(--background); }
+[data-theme="dark"] .to-white { --tw-gradient-to: var(--background); }
+[data-theme="dark"] .border-white { border-color: var(--surface); }
+[data-theme="dark"] .bg-green-100 { background-color: #14532d; }
+[data-theme="dark"] .border-green-100 { border-color: #14532d; }
+[data-theme="dark"] .border-blue-100 { border-color: #1e3a8a; }
+[data-theme="dark"] .hover\:bg-blue-100:hover { background-color: #1e3a8a; }
+
+[data-theme="dark"] .glass {
+  background: rgba(11, 17, 32, 0.78);
+  border-color: rgba(39, 52, 73, 0.8);
+}
+[data-theme="dark"] .card-shadow { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35); }
+[data-theme="dark"] .card-shadow-hover { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(59, 130, 246, 0.2); }
+[data-theme="dark"] .hero-grid {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
+    linear-gradient(to bottom, #0b1120 0%, #0f172a 100%);
+}
+[data-theme="dark"] .gradient-text { background-image: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%); }
+[data-theme="dark"] ::selection { background: #1e3a8a; color: #e2e8f0; }
+
+/* The wordmark is dark blue; show it white on dark surfaces. */
+[data-theme="dark"] img[alt="EXCRO"] { filter: brightness(0) invert(1); }
+
+/* Hero glow blobs are pale blue on white; on dark they read as grey haze, so use a faint brand blue. */
+[data-theme="dark"] .bg-blue-100\/40,
+[data-theme="dark"] .bg-blue-100\/25,
+[data-theme="dark"] .bg-blue-200\/30,
+[data-theme="dark"] .bg-indigo-200\/25 { background-color: rgb(59 130 246 / 0.12); }

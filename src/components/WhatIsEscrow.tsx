@@ -103,7 +103,7 @@ export function WhatIsEscrow() {
           <video
             ref={videoRef}
             className="aspect-video w-full object-cover"
-            src="/excro_highlight.mp4"
+            src="/excro_highlight1.mp4"
             muted
             loop
             controls

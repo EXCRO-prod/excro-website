@@ -35,9 +35,16 @@ export const metadata: Metadata = {
   },
 };
 
+// Applies the saved theme before first paint so dark-mode visitors never see a light flash.
+// Same storage key as the escrow app (escrow/web) so the two read alike.
+const themeScript = `(function(){try{if(localStorage.getItem("excro.theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}})()`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+    <html lang="en" data-theme="light" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-full bg-white font-sans text-foreground">{children}</body>
     </html>
   );

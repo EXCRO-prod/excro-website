@@ -1,0 +1,379 @@
+<title>Excro Master Plan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap">
+<style>
+:root{
+  --paper:#f5f6f3; --surface:#ffffff; --sunk:#eceee9; --ink:#17201c; --ink-2:#4b5751; --ink-3:#77827c;
+  --line:#d8ddd7; --accent:#0e6b58; --accent-ink:#ffffff; --accent-soft:#dcefe8;
+  --ok:#1f7a3f; --ok-soft:#e1f2e6; --warn:#9a6300; --warn-soft:#fbefd6; --bad:#b3261e; --bad-soft:#fbe3e0;
+  --hold:#3d5a99; --hold-soft:#e3e9f7;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111614; --surface:#18201d; --sunk:#1f2825; --ink:#e7ece9; --ink-2:#b2bdb7; --ink-3:#86928c;
+    --line:#2d3833; --accent:#46b89c; --accent-ink:#0b1311; --accent-soft:#17352d;
+    --ok:#5cc47f; --ok-soft:#173222; --warn:#e2a93b; --warn-soft:#3a2d12; --bad:#f07a70; --bad-soft:#3d1c19;
+    --hold:#8fa9e6; --hold-soft:#1d2640;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111614; --surface:#18201d; --sunk:#1f2825; --ink:#e7ece9; --ink-2:#b2bdb7; --ink-3:#86928c;
+  --line:#2d3833; --accent:#46b89c; --accent-ink:#0b1311; --accent-soft:#17352d;
+  --ok:#5cc47f; --ok-soft:#173222; --warn:#e2a93b; --warn-soft:#3a2d12; --bad:#f07a70; --bad-soft:#3d1c19;
+  --hold:#8fa9e6; --hold-soft:#1d2640;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:1120px;margin:0 auto}
+header.top{padding-block:28px 0;display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--cond);font-weight:700;font-size:clamp(28px,4.2vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:68ch;margin:4px 0 0}
+.tabs{display:flex;gap:4px;margin-top:22px;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);z-index:5}
+.tab{appearance:none;border:0;background:none;font:600 14px var(--sans);color:var(--ink-2);padding:12px 14px;border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.layout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px;margin-top:28px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);align-self:start;display:flex;flex-direction:column;gap:2px;font-size:13px}
+nav.toc a{color:var(--ink-2);text-decoration:none;padding:5px 8px;border-radius:4px}
+nav.toc a:hover{background:var(--sunk);color:var(--ink)}
+@media (max-width:860px){.layout{grid-template-columns:1fr}nav.toc{display:none}}
+section{padding-block:8px 28px;border-bottom:1px solid var(--line);margin-bottom:28px}
+section:last-child{border-bottom:0}
+h2{font-family:var(--cond);font-size:24px;line-height:1.2;margin:0 0 10px;text-wrap:balance}
+h3{font-size:16px;margin:22px 0 8px}
+p{margin:0 0 12px;max-width:72ch}
+.muted{color:var(--ink-2)}
+code,.mono{font-family:var(--mono);font-size:.9em}
+.rules{display:flex;flex-direction:column;gap:0;counter-reset:r;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.rules li{list-style:none;display:grid;grid-template-columns:36px 1fr;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.rules li:last-child{border-bottom:0}
+.rules li::before{counter-increment:r;content:counter(r);font-family:var(--mono);font-weight:500;color:var(--accent);font-size:18px}
+.rules b{display:block}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface);margin:10px 0 14px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);font-weight:600;background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);white-space:nowrap}
+.pill{display:inline-block;font:500 11.5px var(--mono);padding:2px 7px;border-radius:99px;white-space:nowrap}
+.p-ok{background:var(--ok-soft);color:var(--ok)} .p-warn{background:var(--warn-soft);color:var(--warn)}
+.p-bad{background:var(--bad-soft);color:var(--bad)} .p-hold{background:var(--hold-soft);color:var(--hold)}
+.p-acc{background:var(--accent-soft);color:var(--accent)}
+.stage{font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin:22px 0 4px}
+.note{border-left:3px solid var(--warn);background:var(--warn-soft);padding:10px 14px;border-radius:0 6px 6px 0;margin:12px 0;max-width:78ch}
+.note.ok{border-color:var(--accent);background:var(--accent-soft)}
+.pipeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px}
+.step .k{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.step b{display:block;margin:2px 0 4px;font-size:14px}
+.step span{font-size:13px;color:var(--ink-2)}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;overflow-x:auto}
+ul.tight{padding-left:18px;margin:0 0 12px} ul.tight li{margin:3px 0;max-width:74ch}
+
+/* ---------- mockup ---------- */
+.mock{margin-top:24px}
+.stepper{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.stepper button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:500 13px var(--sans);padding:7px 12px;border-radius:99px;cursor:pointer}
+.stepper button[aria-current="step"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.stepper button .n{font-family:var(--mono);margin-right:6px;opacity:.7}
+.device{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.appbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--sunk)}
+.appbar .brand{font-family:var(--cond);font-weight:700;font-size:17px}
+.appbar .deal{font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.screen{padding:20px 18px 24px}
+.screen h3{margin-top:0;font-size:18px}
+.cols{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.panel{border:1px solid var(--line);border-radius:8px;padding:14px;background:var(--paper)}
+.panel h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+.cond{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.cond:last-child{border-bottom:0}
+.who{font:600 11px var(--mono);padding:2px 6px;border-radius:4px;background:var(--sunk);color:var(--ink-2)}
+.cite{font:12px var(--mono);color:var(--accent);white-space:nowrap}
+.cond small{display:block;color:var(--ink-3);font-size:12.5px}
+.scn{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:12px;margin-bottom:10px}
+.scn-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.scn-h b{font-size:14px}
+.scn p{font-size:13.5px;margin:6px 0 8px;color:var(--ink-2)}
+.params{display:flex;gap:8px;flex-wrap:wrap}
+.param{font:12.5px var(--mono);border:1px solid var(--line);border-radius:4px;padding:3px 8px;background:var(--paper)}
+.param input{font:inherit;width:3.4em;border:0;background:transparent;color:var(--ink);text-align:right;padding:0}
+.acc{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.acc button{appearance:none;font:500 12.5px var(--sans);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:5px 10px;border-radius:5px;cursor:pointer}
+.acc button[aria-pressed="true"]{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.btn{appearance:none;border:0;background:var(--accent);color:var(--accent-ink);font:600 14px var(--sans);padding:10px 16px;border-radius:6px;cursor:pointer}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0;font-family:var(--mono)}
+.check{display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px;align-items:start}
+.check:last-child{border-bottom:0}
+.dot{width:16px;height:16px;border-radius:50%;margin-top:3px}
+.d-ok{background:var(--ok)} .d-warn{background:var(--warn)} .d-bad{background:var(--bad)} .d-wait{background:transparent;border:2px solid var(--ink-3)}
+.slip{border:1px dashed var(--ink-3);border-radius:6px;padding:14px;font-family:var(--mono);font-size:12px;line-height:1.7;background:var(--surface);position:relative}
+.slip mark{background:var(--accent-soft);color:var(--ink);padding:0 3px;border-radius:2px}
+.clock{display:flex;align-items:baseline;gap:8px;margin-top:12px}
+.clock .big{font:600 26px var(--mono)}
+.select{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+.select button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:500 12.5px var(--sans);padding:6px 10px;border-radius:5px;cursor:pointer}
+.select button[aria-pressed="true"]{border-color:var(--accent);color:var(--ink);background:var(--accent-soft)}
+.total td{font-weight:600;background:var(--sunk)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.progress{display:flex;gap:4px;margin:10px 0 2px}
+.progress i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress i.on{background:var(--accent)}
+.foot{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+@media (prefers-reduced-motion:no-preference){.screen{animation:fade .18s ease-out}}
+@keyframes fade{from{opacity:.4}to{opacity:1}}
+
+.verdict{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.verdict div{padding:14px 16px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:120px 1fr;gap:14px}
+.verdict div:last-child{border-bottom:0}
+.verdict .tag{font:600 11.5px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--bad);padding-top:2px}
+@media (max-width:600px){.verdict div{grid-template-columns:1fr;gap:4px}}
+.timeline{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0}
+.timeline .ph{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:6px;padding:12px}
+.timeline .ph.later{border-top-color:var(--ink-3)}
+.timeline .when{font:12px var(--mono);color:var(--ink-3)}
+.timeline b{display:block;margin:2px 0 6px}
+.timeline ul{padding-left:16px;margin:0;font-size:13px;color:var(--ink-2)}
+@media (max-width:900px){.timeline{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.timeline{grid-template-columns:1fr}}
+.files{columns:2 260px;font-family:var(--mono);font-size:13px;padding-left:18px}
+.files li{margin:3px 0}
+</style>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Excro · Master plan v1.0 · 21 Sep 2026 · Prepared by Speedstar AI Labs</div>
+  <h1>Excro Master Plan: trusted conditional escrow, India first, then the Gulf</h1>
+  <p class="lede">What to build, in what order, on Azure, and how to beat CastlerX in India and the regulated escrow players in the UAE. The detailed build specs (16 files for Claude Code, plus MASTER_PROMPT.md) are in the <span class="mono">Digital Escrow</span> folder.</p>
+</header>
+<div class="layout">
+<nav class="toc" aria-label="Sections">
+  <a href="#verdict">Read this first</a>
+  <a href="#market">Market &amp; competitors</a>
+  <a href="#moat">How Excro wins</a>
+  <a href="#trust">Trust &amp; accuracy (HITL)</a>
+  <a href="#flows">Two agreement flows</a>
+  <a href="#gen">Agreement intelligence</a>
+  <a href="#onboard">Onboarding &amp; customisation</a>
+  <a href="#azure">Azure architecture</a>
+  <a href="#me">Middle East</a>
+  <a href="#road">Roadmap</a>
+  <a href="#risks">Risks</a>
+  <a href="#specs">Build specs</a>
+  <a href="#sources">Sources</a>
+</nav>
+<div>
+
+<section id="verdict">
+  <h2>Read this first: five places the brief needs correcting</h2>
+  <div class="verdict">
+    <div><span class="tag">"Unicorn level"</span><span>A valuation comes from distribution and data loops, not from how polished the product is. CastlerX has raised about <b>$7.5M</b> and has about <b>55 people</b> (PitchBook). They can be beaten, but not by adding features. Excro has to win on its existing bank-connected client base, the viral loop where every counterparty is a new user, and outcome data no one else has. The plan is built around those three.</span></div>
+    <div><span class="tag">Azure-first</span><span>Azure is fine. The catch: the strongest models aren't available in-region. Claude on Microsoft Foundry is offered as Global Standard (plus a US data zone). Microsoft says in-UAE processing for GPT-4o/4.1 in UAE North needs <b>Provisioned</b> deployments. So documents are OCR'd and redacted inside the country, and payment data never goes to a model. Choose models by eval score, not by which ones the credits cover.</span></div>
+    <div><span class="tag">Reusing old agreements</span><span>Client agreements are confidential. Drafting from a shared pool of them without consent is a breach waiting to happen. Each tenant drafts from its own private library. The shared library holds only lawyer-drafted clauses plus opted-in, anonymised clauses. Every generated agreement must re-extract to exactly the same Release Schedule, or it's rejected.</span></div>
+    <div><span class="tag">Middle East real estate</span><span>Off-plan escrow is already mandatory and run by banks (Dubai Law No. 8 of 2007; KSA Wafi). That isn't a gap to fill. The gaps are resale deposits (the ~10% Form F/MOU deposit often held by brokers), cross-border buyers, and India↔UAE trade escrow as a cheaper alternative to letters of credit.</span></div>
+    <div><span class="tag">Scope vs team</span><span>Two people can't launch India, the UAE and every use case at once, or run 24×7 money operations. Plan: India goods-sale first, one bank, and Excro owns operations. UAE starts only after India hits its exit criteria.</span></div>
+  </div>
+</section>
+
+<section id="market">
+  <h2>Market &amp; competitors</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Player</th><th>Market</th><th>What they have</th><th>Where they're weak (for Excro)</th></tr></thead>
+    <tbody>
+      <tr><td><b>CastlerX / Castler</b></td><td>India</td><td>Rule-based payouts, AI agreement extraction, 15+ partner banks, virtual sub-accounts, "1,000+ enterprises"; ~$7.5M raised, ~55 staff</td><td>Enterprise/API-led; failure rules are not a pre-agreed product layer; no visible counterparty growth loop</td></tr>
+      <tr><td><b>Escrowpay</b></td><td>India</td><td>Digital escrow for marketplaces and B2B</td><td>Site unreachable in research; treat as active and benchmark later</td></tr>
+      <tr><td><b>Bank escrow desks</b> (ICICI, Axis, YES, IDFC…)</td><td>India</td><td>Balance sheet, trust, escrow accounts</td><td>Paper mandates, weeks to set up, no evidence automation; they're Excro's rails, not competitors</td></tr>
+      <tr><td><b>TrustIn</b></td><td>UAE</td><td>ADGM FSRA Cat 3C money services; Emirates NBD holds funds; conditional release; real estate, vehicles, M&amp;A, VC, e-commerce; white-label API</td><td>No stated AI reading or failure playbook; UAE-centric, no India distribution → potential partner for the corridor</td></tr>
+      <tr><td><b>Titanium Escrow (Apex Group)</b></td><td>UAE (ADGM)</td><td>Licensed escrow for M&amp;A, retentions, large assets since 2021</td><td>High-touch, relationship-managed; not SME trade</td></tr>
+      <tr><td><b>Letters of credit</b></td><td>Trade</td><td>Global standard since 1933 (UCP)</td><td>Expensive and paperwork-heavy for SME shipments; a minor clerical error can block payment</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Tailwinds: RBI's PA Master Direction (15 Sep 2025) keeps fund aggregation a licensed activity (₹15 cr net worth, ₹25 cr by year 3). That pushes serious players towards the bank-escrow + technology-provider model this plan uses. India–UAE trade has passed US$100 bn under CEPA.</p>
+</section>
+
+<section id="moat">
+  <h2>How Excro wins: three loops that compound</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Loop</th><th>Mechanism</th><th>Metric to track</th></tr></thead>
+    <tbody>
+      <tr><td><b>Counterparty loop</b></td><td>Every deal brings in a second party who completes KYC and sees their escrow account and payout. After closing: "Collect your next payment with Excro", prefilled.</td><td>% of counterparties who start their own deal within 90 days</td></tr>
+      <tr><td><b>Outcome data loop</b></td><td>Every confirmed extraction, every playbook choice, and every dispute is linked back to the clause that caused it. Clauses get outcome scores, so drafting and playbook defaults improve with every closed deal.</td><td>Disputes per 100 deals falling over time; HITL edit rate falling</td></tr>
+      <tr><td><b>Rails loop</b></td><td>Excro's bank integrations (YES, Axis, IDFC, ICICI) mean escrow is an extra step inside payments clients already make. Every bank added makes the platform more useful for the next tenant.</td><td>Share of deals from existing Excro clients; banks live</td></tr>
+    </tbody>
+  </table></div>
+  <p>Investor framing (Titan Capital's "What Matters Now"): the proprietary data is the outcome-labelled clause graph; the compounding loop is counterparty conversion; production proof is live funded deals, not pilots. Gross margin depends on keeping LLM and OCR cost per deal well below the fee, which is why the AI gateway meters cost per tenant from day one.</p>
+</section>
+
+<section id="trust">
+  <h2>Trust &amp; accuracy: human in the loop by design</h2>
+  <p>Accuracy doesn't come from trusting one model. It comes from redundancy, verifiable citations, and people confirming every condition.</p>
+  <div class="pipeline">
+    <div class="step"><div class="k">1 · In-country OCR</div><b>Layout + text</b><span>Document Intelligence in the deal's own jurisdiction; page and position for every word</span></div>
+    <div class="step"><div class="k">2 · Redact</div><b>Tokenise PII</b><span>Names, IDs and accounts replaced with tokens before any model call</span></div>
+    <div class="step"><div class="k">3 · Two readers</div><b>Independent extraction</b><span>Two model families extract into the same strict schema</span></div>
+    <div class="step"><div class="k">4 · Verify</div><b>Quote must exist</b><span>Every field cites text that is checked word-for-word against the OCR. No quote, no condition.</span></div>
+    <div class="step"><div class="k">5 · Humans</div><b>Both parties tick every condition</b><span>No "accept all". An edit by one side re-opens it for the other. Excro reviews high-value or contested deals.</span></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Confidence</th><th>Rule</th><th>What the user sees</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill p-ok">Green</span></td><td>Both readers agree, citation verified, type checks pass</td><td>Pre-filled; still needs each party's tick</td></tr>
+      <tr><td><span class="pill p-warn">Amber</span></td><td>Only one reader found it, or poor scan quality at the cited text</td><td>Must open the source snippet before ticking</td></tr>
+      <tr><td><span class="pill p-bad">Red</span></td><td>Readers disagree, citation fails, or clauses conflict</td><td>Blocks signing until resolved; Excro reviewer required</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>Accuracy you can prove:</b> a golden set of 300 double-annotated agreements. CI blocks any prompt or model change if condition recall drops below 95% or amount/date precision below 99%. In production, 5% of confirmed deals are re-audited every week.</p>
+</section>
+
+<section id="flows">
+  <h2>Two ways a deal starts</h2>
+  <p><b>Before either flow:</b> the initiator sets how many parties (2–10) and their roles: payer, payee, broker/fee payee, verifier or observer. Every party must have an Excro account and Excro-verified KYC. Individuals: PAN, Aadhaar (offline via DigiLocker, never stored in full), mobile, email and bank. Entities: PAN, GSTIN, MCA record, documents, the signatory's own KYC and authority, and beneficial owners at 10% or more. No one signs and no escrow account opens until every party is verified.</p>
+  <p>After signing, both flows are identical: escrow account → funding → conditions → release. Excro doesn't do a legal review in either flow.</p>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>A · Signed elsewhere, uploaded</th><th>B · New agreement, drafted on Excro</th></tr></thead>
+    <tbody>
+      <tr><td><b>AI's job</b></td><td>Extract conditions; flag gaps and conflicts with how escrow works; offer 2–3 fixes for each</td><td>Draft the terms; answer every gap as a clause while drafting</td></tr>
+      <tr><td><b>Checks</b></td><td>Signatures present and valid, same copy for both parties, parties match KYC, stamp duty flagged (never blocks)</td><td>Consistency across clauses; the draft must re-extract to the same Release Schedule</td></tr>
+      <tr><td><b>Parties accept</b></td><td>Each gap fix, one by one; mandatory gaps must be resolved or the deal stops</td><td>The final draft, locked by hash; any later edit resets both acceptances</td></tr>
+      <tr><td><b>Signed on Excro via Protean</b></td><td><b>Escrow Release Addendum</b>: accepted fixes + Release Schedule + precedence clause for escrowed funds only</td><td><b>E-stamp</b>, then e-sign the agreement with the Release Schedule as an annex, in one ceremony</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Why Flow A still needs a signature: the accepted fixes change how money moves. If they're only in-app clicks, the original signed agreement wins in any dispute, and the bank won't act without signed authority. A 2-page addendum e-signed through Protean closes that hole without re-reviewing the original.</div>
+</section>
+
+<section id="gen">
+  <h2>Agreement intelligence: drafting from past agreements</h2>
+  <ul class="tight">
+    <li><b>Two libraries.</b> Private (the tenant's own agreements, drafting only for that tenant) and shared (lawyer-drafted clauses plus opted-in, anonymised clauses). Tenant separation is enforced by search-index filters, not by instructions in a prompt.</li>
+    <li><b>Draft flow.</b> Guided intake → best template → top clause variants ranked by fit <i>and</i> by outcome score → AI assembles the draft and fills deal facts → consistency check → <b>round-trip test</b> (the draft is re-extracted and must produce the same Release Schedule) → redline review by the parties.</li>
+    <li><b>Legal line.</b> Every generated draft says it was drafted with AI assistance and should be reviewed with a lawyer. Optional paid review through Excro's legal partner. Clause wording changes go to legal review.</li>
+  </ul>
+</section>
+
+<section id="onboard">
+  <h2>Onboarding &amp; customisation</h2>
+  <p><b>Counterparty in under 3 minutes:</b> WhatsApp link → OTP → see the deal and conditions <i>before</i> KYC → tick conditions → KYC only when signing (PAN and GSTIN autofill, penny-drop, Aadhaar eSign; UAE Pass in the UAE). No app install.</p>
+  <p><b>Tenants customise through configuration, never custom code:</b> brand and domain, allowed deal types and locked clauses, internal approval chains and limits, fee split and reseller markup, webhooks, ERP export and SSO. If a request needs code, it goes into the product for everyone or it doesn't get built. That keeps a 2-person team shipping.</p>
+  <p><b>Visibility built into the product:</b> a "Verified by Excro" escrow-backed offer badge sellers can share, read-only status links for lenders and logistics partners, and SEO template-gallery pages generated from the anonymised clause library.</p>
+</section>
+
+<section id="azure">
+  <h2>Azure architecture</h2>
+  <p class="muted">Each jurisdiction is an isolated cell. A deal is pinned to one cell for life. Only redacted text leaves a cell, and only through the AI gateway.</p>
+<pre class="mermaid">
+flowchart LR
+  U[Buyer / Seller / Tenant] --> FD[Front Door + WAF]
+  FD --> WEB[Next.js on Container Apps]
+  WEB --> APIM[API Management]
+  subgraph CELL[Cell IN · Central India, DR South India]
+    APIM --> SVC[Deal · Schedule · Evidence services]
+    SVC --> ENG[Condition engine - deterministic]
+    ENG --> ORC[Release orchestrator]
+    ORC --> HSM[Managed HSM signing]
+    ORC --> BANK[Bank adapters: YES · Axis · IDFC · ICICI]
+    SVC --> PG[(PostgreSQL ledger + audit chain)]
+    SVC --> BLOB[(Immutable Blob evidence)]
+    SVC --> DI[Document Intelligence]
+    DI --> PII[PII redaction]
+    DUR[Durable Functions timers] --> SB[Service Bus]
+    SB --> ENG
+    SVC --> SEARCH[AI Search clause library]
+    SVC --> ACS[Communication Services: WhatsApp/SMS/email]
+  end
+  PII --> GW[APIM AI gateway]
+  GW --> FM[Foundry models: two families]
+  BANK -. webhooks .-> SB
+</pre>
+  <div class="tbl"><table>
+    <thead><tr><th>Decision</th><th>Choice</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Compute</td><td>Azure Container Apps (not AKS)</td><td>Scale to zero, no cluster to run with 2 people</td></tr>
+      <tr><td>System of record</td><td>PostgreSQL Flexible Server, zone-redundant</td><td>Double-entry ledger needs relational transactions</td></tr>
+      <tr><td>Deadlines</td><td>Durable Functions, one orchestration per deal</td><td>Reliable timers for deadlines, reminders and objection windows</td></tr>
+      <tr><td>Ordering</td><td>Service Bus sessions keyed by deal</td><td>Events for a deal are applied strictly in order</td></tr>
+      <tr><td>Keys</td><td>Managed HSM for payout signing</td><td>Banks can verify every instruction came from Excro's key</td></tr>
+      <tr><td>Evidence</td><td>Blob with immutability policies</td><td>Evidence can't be altered after upload, even by admins</td></tr>
+      <tr><td>Identity</td><td>Entra External ID (users), Entra ID + PIM (staff)</td><td>Passkeys/OTP for parties; just-in-time admin access</td></tr>
+      <tr><td>Regions</td><td>Central/South India → UAE North/Central → Saudi Arabia East (announced Nov 2026)</td><td>Data residency per jurisdiction</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="me">
+  <h2>Middle East entry</h2>
+  <ul class="tight">
+    <li><b>Regulation:</b> escrow agents in the UAE must be regulated (CBUAE, DFSA or FSRA). TrustIn runs under ADGM FSRA Category 3C with Emirates NBD holding funds. <b>Recommendation:</b> run as the technology platform for a licensed agent or bank first. Consider Excro's own ADGM licence only once volume pays for the capital and compliance cost.</li>
+    <li><b>Lead use cases:</b> India→UAE export escrow (Excro already serves the Indian exporter), UAE→India import advances, Dubai resale deposit escrow, and Indian buyers purchasing Dubai property.</li>
+    <li><b>Product changes:</b> AED/USD/INR ledger with FX from the partner bank, a playbook that follows Incoterms (FOB vs CIF changes who bears transit loss), bill of lading and container-tracking evidence, UAE Pass, Arabic RTL, no interest on escrow balances.</li>
+    <li><b>KSA:</b> after the UAE works, with a licensed Saudi partner and the Saudi Arabia East region.</li>
+  </ul>
+</section>
+
+<section id="road">
+  <h2>Roadmap</h2>
+  <div class="timeline">
+    <div class="ph"><div class="when">Oct 2026 · 4 wks</div><b>0 · Foundations</b><ul><li>Legal opinion on RBI PA boundary</li><li>Bank #1 + escrow mandate</li><li>Azure landing zone</li><li>100 golden agreements</li><li>Mockups signed off</li></ul></div>
+    <div class="ph"><div class="when">Nov 2026 – Feb 2027</div><b>1 · India MVP</b><ul><li>Goods sale + inspection</li><li>HITL extraction, playbook, money map</li><li>Courier + e-invoice evidence</li><li>Both agreement flows + Protean e-stamp/e-sign</li><li>Pilot 5–10 Excro clients, ≤ ₹25 L per deal</li></ul></div>
+    <div class="ph"><div class="when">Mar – Jun 2027</div><b>2 · India scale</b><ul><li>Services, JV splits</li><li>Bank #2, API, white-label</li><li>Agreement generation</li><li>ODR partner, ISO 27001 start</li></ul></div>
+    <div class="ph later"><div class="when">Jul – Dec 2027</div><b>3 · UAE</b><ul><li>Licensed partner signed</li><li>Cell AE (UAE North)</li><li>Trade + resale deposits</li><li>UAE Pass, Arabic</li></ul></div>
+    <div class="ph later"><div class="when">2028</div><b>4 · KSA / trade depth</b><ul><li>Only if Phase 3 exit met</li><li>Saudi Arabia East cell</li></ul></div>
+  </div>
+  <p class="muted">Phase 1 exit: 50 funded deals, 0 unreconciled rupees, eval gates green, pen-test criticals closed, median upload-to-signed under 30 min.</p>
+</section>
+
+<section id="risks">
+  <h2>Risks that could sink this</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Risk</th><th>Likelihood</th><th>Mitigation</th></tr></thead>
+    <tbody>
+      <tr><td>RBI treats Excro as a payment aggregator</td><td><span class="pill p-warn">Medium</span></td><td>Bank-as-agent structure, legal opinion in Phase 0, never touch funds</td></tr>
+      <tr><td>Bank #1 is slow to sign the STP payout mandate</td><td><span class="pill p-bad">High</span></td><td>Run two banks in parallel in Phase 0; VA-pool approach for banks without a create-account API</td></tr>
+      <tr><td>A wrong extraction releases money</td><td><span class="pill p-hold">Low with design</span></td><td>Dual extraction, citation verifier, both parties tick every condition, eval gates</td></tr>
+      <tr><td>CastlerX copies the playbook</td><td><span class="pill p-warn">Medium</span></td><td>Speed, Excro distribution, outcome data they don't have</td></tr>
+      <tr><td>Ops load swamps the 2-person team</td><td><span class="pill p-bad">High</span></td><td>Excro owns ops/on-call; automation targets &gt;85% touchless deals</td></tr>
+      <tr><td>UAE partner economics don't work</td><td><span class="pill p-warn">Medium</span></td><td>Start with India-origin corridor flows where Excro brings the customer</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="specs">
+  <h2>Build specs (in the Digital Escrow folder)</h2>
+  <ul class="files">
+    <li>CLAUDE.md: non-negotiable rules for Claude Code</li>
+    <li>00-index.md</li>
+    <li>01-product-requirements.md</li>
+    <li>02-domain-model.md: Release Schedule JSON</li>
+    <li>03-condition-release-engine.md</li>
+    <li>04-ai-pipeline-hitl.md</li>
+    <li>05-evidence-and-integrations.md</li>
+    <li>06-azure-architecture.md</li>
+    <li>07-security-compliance.md</li>
+    <li>08-api.md</li>
+    <li>09-ux-onboarding.md</li>
+    <li>10-roadmap.md</li>
+    <li>11-middle-east.md</li>
+    <li>12-agreement-flows.md</li>
+    <li>13-parties-and-kyc.md</li>
+    <li>14-excro-commission.md</li>
+  </ul>
+</section>
+
+<section id="sources">
+  <h2>Sources</h2>
+  <ul class="tight" style="font-size:13px">
+    <li><a href="https://castlerx.com/">CastlerX</a> · <a href="https://pitchbook.com/profiles/company/454288-24">Castler on PitchBook</a></li>
+    <li><a href="https://indiacorplaw.in/2025/10/09/decoding-rbis-overhaul-of-the-payment-aggregator-directions/">IndiaCorpLaw: RBI PA Directions 2025</a></li>
+    <li><a href="https://www.trustin.ae/">TrustIn</a> · <a href="https://www.trustin.ae/blogs/escrow-in-the-uae-legal-framework-key-regulations-and-best-practices">UAE escrow legal framework</a> · <a href="https://www.apexgroup.com/insights/titanium-financial-and-apex-group-launch-innovative-uae-escrow-product/">Titanium Escrow / Apex</a></li>
+    <li><a href="https://dubailand.gov.ae/en/eservices/certified-escrow-agents/escrow-account-details/">DLD approved escrow trustees</a> · <a href="https://egsh.ae/insights/form-f-mou-explained">Form F 10% deposit</a></li>
+    <li><a href="https://rulebook.sama.gov.sa/en/300136-rules-opening-escrow-accounts-real-estate-development-projects">SAMA real estate escrow rules</a> · <a href="https://rega.gov.sa/en/rega-services/platforms/wafi-off-plan-sales-and-lease/">REGA Wafi</a></li>
+    <li><a href="https://www.khaleejtimes.com/supplements/cepa-powers-uae-india-trade-beyond-100-billion-milestone">Khaleej Times: CEPA trade</a> · <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2025/07/28/beyond-letters-of-credit-the-rise-of-digital-escrow-in-global-trade/">Forbes: digital escrow vs LCs</a></li>
+    <li><a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/use-foundry-models-claude">Claude in Microsoft Foundry</a> · <a href="https://www.infoq.com/news/2026/07/claude-foundry-ga-europe/">InfoQ: Foundry residency</a> · <a href="https://learn.microsoft.com/en-us/answers/questions/5516012/clarification-needed-is-gpt-4-model-inference-supp">Microsoft Q&amp;A: UAE North processing</a> · <a href="https://news.microsoft.com/source/emea/2026/08/microsoft-announces-saudi-arabia-east-datacenter-region-will-be-available-in-november-2026/">Saudi Arabia East region</a></li>
+  </ul>
+</section>
+
+</div></div></div>

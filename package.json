@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently -n site,escrow-api -c blue,green \"next dev\" \"npm --prefix escrow run dev\"",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "escrow:install": "npm --prefix escrow install",
+    "escrow:dev": "npm --prefix escrow run dev",
+    "escrow:test": "npm --prefix escrow test",
+    "dev:site": "next dev"
   },
   "dependencies": {
     "framer-motion": "^12.43.0",
@@ -21,6 +25,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.2.4",
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
     "tailwindcss": "^4",

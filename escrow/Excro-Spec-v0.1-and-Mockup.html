@@ -1,0 +1,633 @@
+<title>Excro Conditional Release</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap">
+<style>
+:root{
+  --paper:#f5f6f3; --surface:#ffffff; --sunk:#eceee9; --ink:#17201c; --ink-2:#4b5751; --ink-3:#77827c;
+  --line:#d8ddd7; --accent:#0e6b58; --accent-ink:#ffffff; --accent-soft:#dcefe8;
+  --ok:#1f7a3f; --ok-soft:#e1f2e6; --warn:#9a6300; --warn-soft:#fbefd6; --bad:#b3261e; --bad-soft:#fbe3e0;
+  --hold:#3d5a99; --hold-soft:#e3e9f7;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111614; --surface:#18201d; --sunk:#1f2825; --ink:#e7ece9; --ink-2:#b2bdb7; --ink-3:#86928c;
+    --line:#2d3833; --accent:#46b89c; --accent-ink:#0b1311; --accent-soft:#17352d;
+    --ok:#5cc47f; --ok-soft:#173222; --warn:#e2a93b; --warn-soft:#3a2d12; --bad:#f07a70; --bad-soft:#3d1c19;
+    --hold:#8fa9e6; --hold-soft:#1d2640;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111614; --surface:#18201d; --sunk:#1f2825; --ink:#e7ece9; --ink-2:#b2bdb7; --ink-3:#86928c;
+  --line:#2d3833; --accent:#46b89c; --accent-ink:#0b1311; --accent-soft:#17352d;
+  --ok:#5cc47f; --ok-soft:#173222; --warn:#e2a93b; --warn-soft:#3a2d12; --bad:#f07a70; --bad-soft:#3d1c19;
+  --hold:#8fa9e6; --hold-soft:#1d2640;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:1120px;margin:0 auto}
+header.top{padding-block:28px 0;display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--cond);font-weight:700;font-size:clamp(28px,4.2vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:68ch;margin:4px 0 0}
+.tabs{display:flex;gap:4px;margin-top:22px;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);z-index:5}
+.tab{appearance:none;border:0;background:none;font:600 14px var(--sans);color:var(--ink-2);padding:12px 14px;border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.layout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px;margin-top:28px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);align-self:start;display:flex;flex-direction:column;gap:2px;font-size:13px}
+nav.toc a{color:var(--ink-2);text-decoration:none;padding:5px 8px;border-radius:4px}
+nav.toc a:hover{background:var(--sunk);color:var(--ink)}
+@media (max-width:860px){.layout{grid-template-columns:1fr}nav.toc{display:none}}
+section{padding-block:8px 28px;border-bottom:1px solid var(--line);margin-bottom:28px}
+section:last-child{border-bottom:0}
+h2{font-family:var(--cond);font-size:24px;line-height:1.2;margin:0 0 10px;text-wrap:balance}
+h3{font-size:16px;margin:22px 0 8px}
+p{margin:0 0 12px;max-width:72ch}
+.muted{color:var(--ink-2)}
+code,.mono{font-family:var(--mono);font-size:.9em}
+.rules{display:flex;flex-direction:column;gap:0;counter-reset:r;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.rules li{list-style:none;display:grid;grid-template-columns:36px 1fr;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.rules li:last-child{border-bottom:0}
+.rules li::before{counter-increment:r;content:counter(r);font-family:var(--mono);font-weight:500;color:var(--accent);font-size:18px}
+.rules b{display:block}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface);margin:10px 0 14px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);font-weight:600;background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);white-space:nowrap}
+.pill{display:inline-block;font:500 11.5px var(--mono);padding:2px 7px;border-radius:99px;white-space:nowrap}
+.p-ok{background:var(--ok-soft);color:var(--ok)} .p-warn{background:var(--warn-soft);color:var(--warn)}
+.p-bad{background:var(--bad-soft);color:var(--bad)} .p-hold{background:var(--hold-soft);color:var(--hold)}
+.p-acc{background:var(--accent-soft);color:var(--accent)}
+.stage{font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin:22px 0 4px}
+.note{border-left:3px solid var(--warn);background:var(--warn-soft);padding:10px 14px;border-radius:0 6px 6px 0;margin:12px 0;max-width:78ch}
+.note.ok{border-color:var(--accent);background:var(--accent-soft)}
+.pipeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px}
+.step .k{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.step b{display:block;margin:2px 0 4px;font-size:14px}
+.step span{font-size:13px;color:var(--ink-2)}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;overflow-x:auto}
+ul.tight{padding-left:18px;margin:0 0 12px} ul.tight li{margin:3px 0;max-width:74ch}
+
+/* ---------- mockup ---------- */
+.mock{margin-top:24px}
+.stepper{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.stepper button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:500 13px var(--sans);padding:7px 12px;border-radius:99px;cursor:pointer}
+.stepper button[aria-current="step"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.stepper button .n{font-family:var(--mono);margin-right:6px;opacity:.7}
+.device{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.appbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--sunk)}
+.appbar .brand{font-family:var(--cond);font-weight:700;font-size:17px}
+.appbar .deal{font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.screen{padding:20px 18px 24px}
+.screen h3{margin-top:0;font-size:18px}
+.cols{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.panel{border:1px solid var(--line);border-radius:8px;padding:14px;background:var(--paper)}
+.panel h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+.cond{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.cond:last-child{border-bottom:0}
+.who{font:600 11px var(--mono);padding:2px 6px;border-radius:4px;background:var(--sunk);color:var(--ink-2)}
+.cite{font:12px var(--mono);color:var(--accent);white-space:nowrap}
+.cond small{display:block;color:var(--ink-3);font-size:12.5px}
+.scn{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:12px;margin-bottom:10px}
+.scn-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.scn-h b{font-size:14px}
+.scn p{font-size:13.5px;margin:6px 0 8px;color:var(--ink-2)}
+.params{display:flex;gap:8px;flex-wrap:wrap}
+.param{font:12.5px var(--mono);border:1px solid var(--line);border-radius:4px;padding:3px 8px;background:var(--paper)}
+.param input{font:inherit;width:3.4em;border:0;background:transparent;color:var(--ink);text-align:right;padding:0}
+.acc{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.acc button{appearance:none;font:500 12.5px var(--sans);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:5px 10px;border-radius:5px;cursor:pointer}
+.acc button[aria-pressed="true"]{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.btn{appearance:none;border:0;background:var(--accent);color:var(--accent-ink);font:600 14px var(--sans);padding:10px 16px;border-radius:6px;cursor:pointer}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0;font-family:var(--mono)}
+.check{display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px;align-items:start}
+.check:last-child{border-bottom:0}
+.dot{width:16px;height:16px;border-radius:50%;margin-top:3px}
+.d-ok{background:var(--ok)} .d-warn{background:var(--warn)} .d-bad{background:var(--bad)} .d-wait{background:transparent;border:2px solid var(--ink-3)}
+.slip{border:1px dashed var(--ink-3);border-radius:6px;padding:14px;font-family:var(--mono);font-size:12px;line-height:1.7;background:var(--surface);position:relative}
+.slip mark{background:var(--accent-soft);color:var(--ink);padding:0 3px;border-radius:2px}
+.clock{display:flex;align-items:baseline;gap:8px;margin-top:12px}
+.clock .big{font:600 26px var(--mono)}
+.select{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+.select button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:500 12.5px var(--sans);padding:6px 10px;border-radius:5px;cursor:pointer}
+.select button[aria-pressed="true"]{border-color:var(--accent);color:var(--ink);background:var(--accent-soft)}
+.total td{font-weight:600;background:var(--sunk)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.progress{display:flex;gap:4px;margin:10px 0 2px}
+.progress i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress i.on{background:var(--accent)}
+.foot{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+@media (prefers-reduced-motion:no-preference){.screen{animation:fade .18s ease-out}}
+@keyframes fade{from{opacity:.4}to{opacity:1}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Excro · Product specification v0.1 · 20 Sep 2026 · Prepared by Speedstar AI Labs</div>
+  <h1>Conditional Release: digital escrow that plans for failure</h1>
+  <p class="lede">Two parties upload or build an agreement. Excro turns it into a signed <b>Release Schedule</b> that covers what happens when the deal goes well and when it fails. The bank holds the money, and funds move only when verified evidence meets the schedule.</p>
+</header>
+
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" id="t-spec" aria-selected="true" aria-controls="p-spec">Specification</button>
+  <button class="tab" role="tab" id="t-mock" aria-selected="false" aria-controls="p-mock">Clickable mockup</button>
+</div>
+
+<!-- ======================= SPEC ======================= -->
+<div id="p-spec" role="tabpanel" aria-labelledby="t-spec">
+<div class="layout">
+<nav class="toc" aria-label="Sections">
+  <a href="#s-why">Positioning vs CastlerX</a>
+  <a href="#s-rules">Five hard rules</a>
+  <a href="#s-life">Deal lifecycle</a>
+  <a href="#s-cond">Condition catalogue</a>
+  <a href="#s-deliv">Delivery verification</a>
+  <a href="#s-play">Scenario Playbook</a>
+  <a href="#s-money">Money waterfall</a>
+  <a href="#s-disp">Disputes</a>
+  <a href="#s-arch">Architecture &amp; security</a>
+  <a href="#s-mvp">Phase 1 scope</a>
+  <a href="#s-open">Open decisions</a>
+</nav>
+<div>
+
+<section id="s-why">
+  <h2>Positioning vs CastlerX</h2>
+  <p>CastlerX already offers rule-based payouts, AI agreement extraction, virtual sub-accounts under a master escrow account, and dispute holds, through 15+ partner banks. Matching that list won't win. Excro has to win on two things CastlerX treats as secondary:</p>
+  <ul class="tight">
+    <li><b>The failure path is agreed before any money moves.</b> For each deal, the AI proposes what happens if funding is short, the seller doesn't ship, the goods are lost, the buyer goes silent, the order is only partly accepted, or a deduction applies. Both parties accept these rules up front, so a failed deal settles by rule, and only real disagreements need a person to arbitrate.</li>
+    <li><b>Evidence is verified, not just uploaded.</b> A dispatch slip is read, cross-checked and confirmed against the courier's own tracking. An invoice is checked against its GST e-invoice record. Uploaded files are only the starting input.</li>
+  </ul>
+  <div class="note">Honest risk: CastlerX can copy both features. Excro's lasting advantage has to be distribution: its existing corporate clients on YES, Axis, IDFC and ICICI who already pay through Excro. Treat the playbook as a head start, not a moat.</div>
+</section>
+
+<section id="s-rules">
+  <h2>Five hard rules</h2>
+  <ol class="rules">
+    <li><div><b>The bank holds the money; Excro sends instructions.</b>Funds sit in a bank escrow account (a virtual account per deal) under a three-way escrow agreement. Excro is the technology provider that sends release instructions, and never holds or pools client funds.</div></li>
+    <li><div><b>Only the signed Release Schedule moves money.</b>The AI extracts and proposes. Both parties review, edit settings and e-sign. The schedule's hash goes into the signed PDF, which is annexed to the escrow agreement. The bank acts on that schedule, not on the uploaded contract.</div></li>
+    <li><div><b>Every condition has proof, an owner, a deadline and a timeout action.</b>A condition with no deadline, or with no rule for what happens when it's missed, blocks the schedule from being signed.</div></li>
+    <li><div><b>Every rupee has a destination in every outcome.</b>Before signing, the platform lists every possible end state (full release, refund, partial release, cancellation, dispute) and checks that payouts plus fees add up exactly to the deposit. An incomplete money map can't be signed.</div></li>
+    <li><div><b>The AI never decides a payout.</b>Deductions are formulas with caps, agreed up front. At runtime, deterministic code applies the schedule to verified evidence. The AI has no ability to call payouts, so a malicious instruction hidden in an uploaded document can't move money.</div></li>
+  </ol>
+</section>
+
+<section id="s-life">
+  <h2>Deal lifecycle</h2>
+  <p class="muted">A dispute can be raised from any stage after funding. It freezes only the disputed amount.</p>
+<pre class="mermaid">
+stateDiagram-v2
+  [*] --> Draft
+  Draft --> Proposed: AI extracts conditions + playbook
+  Proposed --> InReview: parties edit parameters
+  InReview --> Proposed: text edit → re-validate
+  InReview --> Signed: both e-sign, money map complete
+  Signed --> AccountOpen: virtual escrow account created
+  AccountOpen --> Lapsed: not funded by deadline
+  AccountOpen --> Funded: credit verified, remitter matched
+  Funded --> InPerformance
+  InPerformance --> ReleasePending: all conditions met
+  InPerformance --> Refunding: failure rule fires
+  InPerformance --> Disputed
+  ReleasePending --> Settled: 24h objection window passes
+  ReleasePending --> Disputed
+  Disputed --> Settled: settlement / award executed
+  Refunding --> Closed
+  Settled --> Closed
+  Lapsed --> Closed
+</pre>
+</section>
+
+<section id="s-cond">
+  <h2>Condition catalogue</h2>
+  <p>A small set of condition types, each tied to a source of proof. The AI maps the agreement onto these types. If a clause doesn't fit any type, it's flagged as a <b>manual condition</b> that both parties must confirm by hand.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Type</th><th>Satisfied when</th><th>Proof source</th><th>Fallback proof</th></tr></thead>
+    <tbody>
+      <tr><td><b>Funding</b></td><td>Credit ≥ required amount into the deal's virtual account by the deadline</td><td>Bank credit webhook; sender account and name matched to the verified payer</td><td>Daily statement reconciliation</td></tr>
+      <tr><td><b>Dispatch</b></td><td>Shipment picked up by the courier with a valid tracking number, from the seller's pincode</td><td>Slip read from upload, then confirmed on the courier's tracking API</td><td>Buyer confirms by handover OTP</td></tr>
+      <tr><td><b>Delivery</b></td><td>Courier shows "Delivered" at the agreed pincode; proof of delivery captured</td><td>Courier tracking webhook or polling</td><td>Delivery OTP issued by Excro to the buyer; geo-tagged photo</td></tr>
+      <tr><td><b>Inspection</b></td><td>Buyer accepts all, part or none within N days of delivery</td><td>Buyer action in app / WhatsApp</td><td>Silence past N days counts as acceptance</td></tr>
+      <tr><td><b>Document</b></td><td>Required document is uploaded and checks out</td><td>E-invoice number and QR checked; GSTIN active; e-way bill number valid</td><td>Counterparty accepts the document</td></tr>
+      <tr><td><b>Third-party sign-off</b></td><td>Named inspector, surveyor or CA approves</td><td>Sign-off link sent to the verified third party</td><td>Both parties appoint a replacement</td></tr>
+      <tr><td><b>Milestone / date</b></td><td>Date reached, or milestone confirmed</td><td>System clock; mutual approval</td><td>—</td></tr>
+      <tr><td><b>Computed split</b></td><td>Joint-venture or profit-share figures approved; formula applied</td><td>P&amp;L upload approved by all parties</td><td>Named CA certifies</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="s-deliv">
+  <h2>Delivery verification</h2>
+  <p>The seller uploads a slip. The platform reads it, checks it and confirms it with the courier. Nothing progresses on the upload alone.</p>
+  <div class="pipeline">
+    <div class="step"><div class="k">1 · Read</div><b>Extract from slip</b><span>Courier, tracking number, consignee name, destination pincode, pieces, weight, date</span></div>
+    <div class="step"><div class="k">2 · Cross-check</div><b>Match against schedule</b><span>Consignee ≈ buyer, pincode = agreed delivery address, pieces and weight within tolerance</span></div>
+    <div class="step"><div class="k">3 · Confirm</div><b>Courier API</b><span>Tracking number exists, was picked up from the seller's pincode, and is heading to the buyer's pincode</span></div>
+    <div class="step"><div class="k">4 · Track</div><b>Webhook / poll</b><span>In transit → out for delivery → delivered, with proof of delivery</span></div>
+    <div class="step"><div class="k">5 · Start clock</div><b>Inspection window</b><span>Delivery timestamp starts the buyer's N-day inspection window</span></div>
+  </div>
+  <h3>Fraud checks</h3>
+  <ul class="tight">
+    <li>Tracking number already used in another Excro deal → blocked and flagged.</li>
+    <li>Courier shows a booking date earlier than the deal's funding date → flagged (possible reused slip).</li>
+    <li>Destination pincode mismatch, or delivered to a different city → delivery not verified; buyer and seller notified; no release.</li>
+    <li>Declared weight far below what the agreement implies (e.g. 40 laptops shipped as 2 kg) → sent for review.</li>
+  </ul>
+  <h3>When no courier API is available</h3>
+  <p>For self-delivery, hand delivery, or couriers we haven't integrated: Excro sends the buyer a one-time <b>delivery OTP</b>. The buyer gives it to the seller only at handover, and the seller enters it with a geo-tagged photo. That OTP counts as proof of delivery. If neither is possible, the schedule falls back to the buyer confirming delivery in the app, and both parties see that this is a weaker proof.</p>
+  <div class="note">What tracking can't prove: "Delivered" shows a parcel with that tracking number arrived. It doesn't show what was inside. That's why the inspection window and the partial-acceptance and return rules below exist. Say this clearly in marketing, or the first "brick in the box" case turns into a complaint about the platform.</div>
+</section>
+
+<section id="s-play">
+  <h2>Scenario Playbook</h2>
+  <p>After extraction, the AI goes through the failure modes for that deal type and proposes one rule for each. Rules come from a <b>lawyer-approved clause library</b>. Parties can change the numbers (days, %, caps) freely. Changing the wording marks the clause as <b>custom</b>, and it needs Excro's legal review before signing. The AI's job is to spot gaps and set sensible defaults, not to draft law.</p>
+
+  <div class="stage">Before funding</div>
+  <div class="tbl"><table>
+    <thead><tr><th>Scenario</th><th>Detected by</th><th>Proposed default</th><th>Editable</th></tr></thead>
+    <tbody>
+      <tr><td>Buyer doesn't fund by deadline</td><td>Clock</td><td>Deal lapses. Nothing to refund.</td><td>Deadline</td></tr>
+      <tr><td>Short payment</td><td>Credit &lt; required</td><td>Hold, ask buyer to top up within X days; otherwise refund all money received</td><td>X</td></tr>
+      <tr><td>Overpayment</td><td>Credit &gt; required</td><td>Excess refunded automatically to the account it came from</td><td>—</td></tr>
+      <tr><td>Paid from someone else's account</td><td>Sender ≠ verified payer</td><td>Returned to the account it came from; deal stays unfunded (anti-money-laundering)</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="stage">Before dispatch</div>
+  <div class="tbl"><table>
+    <thead><tr><th>Scenario</th><th>Detected by</th><th>Proposed default</th><th>Editable</th></tr></thead>
+    <tbody>
+      <tr><td>Seller doesn't dispatch in time</td><td>Clock</td><td>Buyer may cancel → full refund. One extension allowed if both agree.</td><td>Days, extension</td></tr>
+      <tr><td>Seller cancels</td><td>Seller action</td><td>Full refund to buyer</td><td>—</td></tr>
+      <tr><td>Buyer cancels after funding</td><td>Buyer action</td><td>Refund less a cancellation fee to the seller</td><td>Fee % (cap 5%)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Structural gap: escrow can only penalise the party whose money it holds. A penalty on the seller (e.g. for failing to deliver) can't be enforced unless the seller also deposits a <b>performance security</b>. The playbook should point this out and offer two-sided escrow for high-value deals.</div>
+
+  <div class="stage">In transit</div>
+  <div class="tbl"><table>
+    <thead><tr><th>Scenario</th><th>Detected by</th><th>Proposed default</th><th>Editable</th></tr></thead>
+    <tbody>
+      <tr><td>Lost, or returned to seller by courier</td><td>Courier status</td><td>Seller re-ships within X days, or buyer gets a full refund. Transit risk sits with the seller unless the agreement says otherwise.</td><td>X, risk owner</td></tr>
+      <tr><td>Delivery later than the agreed delivery date</td><td>Clock vs agreed date</td><td>Late-delivery penalty of 0.5% per day, capped at 5%, deducted from the seller's payout. Buyer may cancel after Y days.</td><td>Rate, cap, Y</td></tr>
+      <tr><td>Delivered to wrong address</td><td>Pincode mismatch</td><td>Not treated as delivered; seller must fix within X days, or refund</td><td>X</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="stage">After delivery</div>
+  <div class="tbl"><table>
+    <thead><tr><th>Scenario</th><th>Detected by</th><th>Proposed default</th><th>Editable</th></tr></thead>
+    <tbody>
+      <tr><td>Buyer says nothing</td><td>Clock</td><td>Accepted after N days (reminders at 48h and 24h before)</td><td>N</td></tr>
+      <tr><td>Partial acceptance</td><td>Buyer marks units</td><td>Accepted units × unit price released; the rest held until return or replacement</td><td>Unit price basis</td></tr>
+      <tr><td>Full rejection</td><td>Buyer rejects with evidence</td><td>Buyer returns goods within X days; refund once courier confirms seller received them</td><td>X, who pays return shipping</td></tr>
+      <tr><td>Seller contests rejection</td><td>Seller action</td><td>Disputed amount frozen; undisputed amount released → Disputes</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="stage">Unusual cases</div>
+  <div class="tbl"><table>
+    <thead><tr><th>Scenario</th><th>Detected by</th><th>Proposed default</th><th>Editable</th></tr></thead>
+    <tbody>
+      <tr><td>Force majeure</td><td>Both parties declare</td><td>Mutual cancellation; refund less documented costs agreed by both</td><td>—</td></tr>
+      <tr><td>Court, tax or attachment order</td><td>Bank / legal notice</td><td>Bank complies; platform locks the deal; both parties notified</td><td>—</td></tr>
+      <tr><td>Party's identity check lapses or a sanctions match appears</td><td>Re-screening</td><td>Payouts held until resolved</td><td>—</td></tr>
+      <tr><td>No resolution by the long-stop date</td><td>Clock</td><td>Funds stay with the bank until a signed settlement, arbitration award or court order arrives. Excro never releases on one party's word.</td><td>Long-stop date</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="s-money">
+  <h2>Money waterfall &amp; deductions</h2>
+  <p>Every outcome is worked out with the same waterfall. The parties see it for every end state before signing (the mockup shows it working).</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Line</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td>Deposit</td><td>Deal value plus each payer's share of the Excro commission, when it is collected from escrow</td></tr>
+      <tr><td>− Excro commission</td><td>Per the deal's commission plan (default zero): amount, who pays, and whether it's withdrawn from escrow at funding, at release, or invoiced outside escrow. Withdrawal at funding is always non-refundable (spec 14). The example below uses 0.5%, split 50/50, taken at release.</td></tr>
+      <tr><td>− Agreed deductions</td><td>Formula-based only (late-delivery penalty per day, shortfall at unit price, cancellation fee), each with a cap; go to the party named in the schedule</td></tr>
+      <tr><td>− Tax deductions</td><td>TDS/TCS settings per deal, set by a CA; <b>never inferred by the AI</b></td></tr>
+      <tr><td>= Payouts</td><td>Must add up to the deposit exactly, or the schedule can't be signed</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Bank transfer charges are shown on their own line, charged to whoever the schedule names (default: the recipient).</p>
+</section>
+
+<section id="s-disp">
+  <h2>Disputes</h2>
+  <ul class="tight">
+    <li><b>Freeze only what's disputed.</b> Undisputed amounts keep moving. Holding the whole deposit hurts the honest party.</li>
+    <li><b>Stage 1: settle in the platform (7 days).</b> Both parties see the evidence side by side. Either can propose a split; once both e-sign it, it's carried out automatically.</li>
+    <li><b>Stage 2: online arbitration.</b> Escalates to an online dispute resolution partner (e.g. Presolv360 or SAMA) named in the escrow agreement. The award is uploaded, checked, and carried out as an instruction.</li>
+    <li><b>Excro never judges.</b> Excro doesn't decide who's right. Taking that role invites liability and regulatory attention.</li>
+  </ul>
+</section>
+
+<section id="s-arch">
+  <h2>Architecture &amp; security</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Component</th><th>What it does</th><th>Security notes</th></tr></thead>
+    <tbody>
+      <tr><td><b>Agreement ingestion</b></td><td>Reads the document (including scanned copies); AI extracts conditions, each linked to the page and paragraph it came from</td><td>Model has no tools; output is only a proposal; uploaded docs treated as untrusted</td></tr>
+      <tr><td><b>Scenario engine</b></td><td>Deal-type checklists plus clause library; AI fills gaps and sets defaults</td><td>Clause library is version-controlled and legally approved</td></tr>
+      <tr><td><b>Schedule compiler</b></td><td>Checks the schedule: every condition has a deadline and timeout; money map adds up. Produces the final schedule and its fingerprint (hash).</td><td>Fingerprint included in the e-signed PDF; any change needs a new signature from both</td></tr>
+      <tr><td><b>Evidence adapters</b></td><td>Bank credits, courier tracking, e-invoice and GSTIN checks, e-sign, OTP</td><td>Incoming bank and courier notifications verified by signature; responses stored as evidence</td></tr>
+      <tr><td><b>Condition engine</b></td><td>Event-driven; applies the schedule to evidence using fixed rules</td><td>No AI in this path</td></tr>
+      <tr><td><b>Release orchestrator</b></td><td>Builds payout instructions and sends them to the bank API</td><td>Each payout can't run twice; manual overrides need a second approver; payee accounts verified; 24h objection window</td></tr>
+      <tr><td><b>Ledger</b></td><td>Double-entry ledger per deal, reconciled daily against the bank statement</td><td>Any mismatch pauses payouts for that bank</td></tr>
+      <tr><td><b>Audit log</b></td><td>Append-only log where each event is hashed to the one before, so tampering shows</td><td>Exportable for the bank, arbitration and auditors</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="s-mvp">
+  <h2>Phase 1 scope</h2>
+  <p>Sized for a 2-person build team. Anything outside this list waits.</p>
+  <ul class="tight">
+    <li><b>One bank</b>: whichever of Excro's four banks approves escrow virtual accounts and payout-by-instruction for a technology provider fastest.</li>
+    <li><b>One deal type</b>: B2B sale of goods with inspection (covers most of the playbook). Service milestones and joint-venture splits come in Phase 2.</li>
+    <li><b>Couriers</b>: one aggregator API for coverage, plus the delivery-OTP fallback. Direct courier integrations only once volume justifies them.</li>
+    <li><b>Disputes</b>: in-platform settlement plus one online arbitration partner, handled manually at first.</li>
+    <li><b>Channels</b>: web app and WhatsApp notifications. Parties act in the web app; WhatsApp nudges them.</li>
+  </ul>
+</section>
+
+<section id="s-open">
+  <h2>Open decisions for Excro</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Decision</th><th>Owner</th><th>Blocks</th></tr></thead>
+    <tbody>
+      <tr><td>Which bank acts as escrow agent first, and does it accept payout instructions from a technology provider under a three-way agreement?</td><td>Excro + bank</td><td><span class="pill p-bad">Launch</span></td></tr>
+      <tr><td>Three-way escrow agreement template that makes the signed Release Schedule binding on the bank</td><td>Excro legal</td><td><span class="pill p-bad">Launch</span></td></tr>
+      <tr><td>Tax treatment of escrow payouts (TDS/TCS; whether Excro counts as an e-commerce operator)</td><td>Excro CA</td><td><span class="pill p-warn">Money waterfall</span></td></tr>
+      <tr><td>E-stamping and stamp duty on escrow agreements, by state</td><td>Excro legal</td><td><span class="pill p-warn">E-sign flow</span></td></tr>
+      <tr><td>Fee model (% of deal, minimum fee, who pays) and fee on failed deals</td><td>Excro</td><td><span class="pill p-hold">Pricing</span></td></tr>
+      <tr><td>Online arbitration partner and clause wording</td><td>Excro legal</td><td><span class="pill p-hold">Disputes</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+</div></div>
+</div>
+
+<!-- ======================= MOCKUP ======================= -->
+<div id="p-mock" role="tabpanel" aria-labelledby="t-mock" hidden>
+<div class="mock">
+  <p class="muted" style="margin-top:0">Example deal, sample data: 40 refurbished laptops at ₹46,000 each. Buyer: Nirmal Traders, Ludhiana. Seller: Kavya Electronics, Bengaluru. Broker: Aman Mehta. Click through the steps.</p>
+  <div class="stepper" id="stepper"></div>
+  <div class="device">
+    <div class="appbar"><span class="brand">excro</span><span class="deal">DEAL EX-2609-0142 · ₹18,40,000</span><span class="status" id="status"></span></div>
+    <div id="screens"></div>
+  </div>
+</div>
+</div>
+</div>
+
+<template id="scP">
+<div class="screen">
+  <h3>Who is in this escrow?</h3>
+  <p class="muted" style="font-size:13.5px">3 parties. Everyone needs an Excro account and Excro-verified KYC. You can review terms while KYC completes; no one can sign and no escrow account opens until all three are verified.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Party</th><th>Role</th><th>Money</th><th>Excro account</th><th>KYC</th></tr></thead>
+    <tbody>
+      <tr><td><b>Nirmal Traders</b><br><span class="muted" style="font-size:12.5px">Proprietorship · signatory Harpreet Singh</span></td><td>Buyer (payer)</td><td class="num">100% of deposit</td><td><span class="pill p-ok">Verified</span></td><td><span class="pill p-ok">Verified</span><br><span class="muted" style="font-size:12px">PAN · Aadhaar ··4471 (DigiLocker) · GSTIN · Udyam · bank</span></td></tr>
+      <tr><td><b>Kavya Electronics Pvt Ltd</b><br><span class="muted" style="font-size:12.5px">Company · signatory Kavya Rao</span></td><td>Seller (payee)</td><td class="num">Receives release</td><td><span class="pill p-ok">Verified</span></td><td><span class="pill p-hold">Ops review</span><br><span class="muted" style="font-size:12px">GSTIN ✓ · CIN active ✓ · board resolution uploaded, awaiting review · UBOs ≥10% ✓</span></td></tr>
+      <tr><td><b>Aman Mehta</b><br><span class="muted" style="font-size:12.5px">Individual</span></td><td>Broker (fee payee)</td><td class="num">1% of seller release</td><td><span class="pill p-ok">Verified</span></td><td><span class="pill p-warn">In progress</span><br><span class="muted" style="font-size:12px">PAN ✓ · mobile ✓ · email ✓ · Aadhaar pending · bank pending</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="check"><span class="dot d-warn"></span><div><b>Signing locked</b>: 2 of 3 parties not yet KYC-verified</div><span class="pill p-warn">Waiting</span></div>
+  <p class="muted" style="font-size:12.5px;margin:10px 0 0">KYC stays with each Excro account and is reused in future deals. Other parties see status only, never documents. Aadhaar is shown masked.</p>
+</div>
+</template>
+<template id="sc0">
+<div class="screen">
+  <h3>How is this deal starting?</h3>
+  <div class="cols">
+    <div class="panel">
+      <h4>A · I already have a signed agreement</h4>
+      <p style="font-size:13.5px">Upload it. Excro won't review it legally. We check it's signed and identical for both sides, read the conditions, and flag gaps that would block a clean release.</p>
+      <div class="check"><span class="dot d-ok"></span><div>2 digital signatures valid; not modified after signing</div><span class="pill p-ok">Signed</span></div>
+      <div class="check"><span class="dot d-ok"></span><div>Seller confirmed the same file (hash match)</div><span class="pill p-ok">Same copy</span></div>
+      <div class="check"><span class="dot d-warn"></span><div>No stamp duty details found<br><span class="muted">Advisory only; check with your lawyer.</span></div><span class="pill p-warn">Flag</span></div>
+      <div class="check"><span class="dot d-bad"></span><div><b>Mandatory gap:</b> no refund rule if the seller never ships<br><span class="muted">Options: full refund after 5 days · after 10 days · one extension then refund</span></div><span class="pill p-bad">Choose</span></div>
+      <p class="muted" style="font-size:12.5px;margin:10px 0 0">Accepted fixes become a 2-page Escrow Release Addendum, e-signed by both via Protean.</p>
+    </div>
+    <div class="panel">
+      <h4>B · We need a new agreement</h4>
+      <p style="font-size:13.5px">Answer a few questions. Excro drafts from lawyer-approved clauses, with the failure rules built into the terms. Both of you edit and accept the same version.</p>
+      <dl class="kv"><dt>Template</dt><dd>B2B goods sale with inspection</dd><dt>Clauses</dt><dd>14 library · 0 custom</dd><dt>Round-trip</dt><dd>schedule matches draft ✓</dd><dt>Accepted</dt><dd>Buyer ✓ · Seller pending</dd></dl>
+      <p class="muted" style="font-size:12.5px;margin:10px 0 0">Then e-stamp (Punjab, paid by buyer) and e-sign via Protean in one step. The Release Schedule is signed as an annex.</p>
+    </div>
+  </div>
+</div>
+</template>
+<template id="sc1">
+<div class="screen">
+  <h3>Conditions extracted from your agreement</h3>
+  <p class="muted" style="font-size:13.5px">Supply_Agreement_Nirmal_Kavya.pdf · 6 pages · 7 conditions found. Each links to the clause it came from. Check each one.</p>
+  <div class="cols">
+    <div class="panel">
+      <h4>Conditions</h4>
+      <div class="cond"><span class="who">BUYER</span><div>Deposit ₹18,40,000 into escrow<small>Within 3 days of signing</small></div><span class="cite">§3.1 p2</span></div>
+      <div class="cond"><span class="who">SELLER</span><div>Dispatch 40 units by courier<small>Within 5 days of funding confirmed</small></div><span class="cite">§4.2 p3</span></div>
+      <div class="cond"><span class="who">SELLER</span><div>Upload GST e-invoice and e-way bill<small>With dispatch</small></div><span class="cite">§4.4 p3</span></div>
+      <div class="cond"><span class="who">COURIER</span><div>Delivered at 141003, Ludhiana<small>Agreed delivery date: 30 Sep 2026</small></div><span class="cite">§4.3 p3</span></div>
+      <div class="cond"><span class="who">BUYER</span><div>Inspect and accept units<small>Within 3 days of delivery</small></div><span class="cite">§5.1 p4</span></div>
+      <div class="cond"><span class="who">BOTH</span><div>Late-delivery penalty: 0.5% per day<small>Cap not stated in agreement</small></div><span class="cite">§6.2 p4</span></div>
+      <div class="cond"><span class="who">SYSTEM</span><div>Release payment to seller<small>After acceptance</small></div><span class="cite">§3.3 p2</span></div>
+    </div>
+    <div class="panel">
+      <h4>Needs your attention</h4>
+      <div class="check"><span class="dot d-warn"></span><div><b>Penalty has no cap</b><br><span class="muted">An uncapped per-day penalty could exceed the deal value. Proposed cap: 5%.</span></div><span class="pill p-warn">Fix</span></div>
+      <div class="check"><span class="dot d-warn"></span><div><b>The agreement doesn't say what happens if the buyer doesn't respond</b><br><span class="muted">Covered in the Scenario Playbook (next step).</span></div><span class="pill p-warn">Gap</span></div>
+      <div class="check"><span class="dot d-ok"></span><div><b>Both parties' identities verified</b><br><span class="muted">PAN, GSTIN and bank accounts verified for both.</span></div><span class="pill p-ok">OK</span></div>
+    </div>
+  </div>
+</div>
+</template>
+
+<template id="sc2">
+<div class="screen">
+  <h3>Scenario Playbook: what happens if things go wrong</h3>
+  <p class="muted" style="font-size:13.5px">Excro found 9 things that could go wrong. You can change the numbers. Changing the wording sends the clause for legal review.</p>
+  <div class="cols">
+    <div id="scnList"></div>
+    <div>
+      <div class="panel">
+        <h4>Sign-off</h4>
+        <div class="kv"><dt>Buyer</dt><dd id="accB">0 / 5 accepted</dd><dt>Seller</dt><dd id="accS">0 / 5 accepted</dd><dt>Money map</dt><dd><span class="pill p-ok">7 outcomes add up</span></dd></div>
+        <div class="progress" id="prog"></div>
+        <p class="muted" style="font-size:12.5px;margin:10px 0 12px">The schedule can be e-signed once both parties accept every rule. Its fingerprint is included in the signed PDF.</p>
+        <button class="btn" id="signBtn" disabled>E-sign Release Schedule</button>
+      </div>
+      <p class="muted" style="font-size:12.5px;margin-top:10px">Also covered (shown in full view): overpayment, payment from someone else's account, force majeure, court or legal orders.</p>
+    </div>
+  </div>
+</div>
+</template>
+
+<template id="sc3">
+<div class="screen">
+  <h3>Escrow account is open</h3>
+  <div class="cols">
+    <div class="panel">
+      <h4>Pay into this account (buyer)</h4>
+      <dl class="kv">
+        <dt>Account name</dt><dd>EXCRO ESCROW A/C EX26090142</dd>
+        <dt>Account no.</dt><dd>EXCRO26090142</dd>
+        <dt>IFSC</dt><dd>BANK0ESCROW</dd>
+        <dt>Amount</dt><dd>₹18,44,600</dd>
+        <dt>Pay from</dt><dd>Nirmal Traders ··· 4471 only</dd>
+        <dt>By</dt><dd>23 Sep 2026, 6:00 pm</dd>
+      </dl>
+      <p class="muted" style="font-size:12.5px;margin:10px 0 0">₹18,40,000 deal value + ₹4,600 buyer's half of the Excro fee. Payments from any other account are sent back automatically. Account details are placeholders.</p>
+    </div>
+    <div class="panel">
+      <h4>Payment received</h4>
+      <div class="check"><span class="dot d-ok"></span><div>Credit ₹18,44,600 via RTGS<br><span class="muted mono" style="font-size:12px">UTR HDFCR5260923…8812 · 22 Sep 11:42</span></div><span class="pill p-ok">Received</span></div>
+      <div class="check"><span class="dot d-ok"></span><div>Sender matches the verified buyer account<br><span class="muted">NIRMAL TRADERS · ···4471</span></div><span class="pill p-ok">Match</span></div>
+      <div class="check"><span class="dot d-ok"></span><div>Excro ledger matches the bank balance</div><span class="pill p-ok">Balanced</span></div>
+      <div class="check"><span class="dot d-wait"></span><div>Seller's dispatch deadline<br><span class="muted">27 Sep 2026 (5 days)</span></div><span class="pill p-hold">Seller's turn</span></div>
+    </div>
+  </div>
+</div>
+</template>
+
+<template id="sc4">
+<div class="screen">
+  <h3>Dispatch and delivery checks</h3>
+  <div class="cols">
+    <div>
+      <div class="panel">
+        <h4>Slip uploaded by seller · extracted fields highlighted</h4>
+        <div class="slip">
+          COURIER: <mark>Delhivery</mark> &nbsp; AWB: <mark>2847 1190 3365</mark><br>
+          FROM: Kavya Electronics, Peenya, Bengaluru <mark>560058</mark><br>
+          TO: <mark>Nirmal Traders</mark>, Focal Point, Ludhiana <mark>141003</mark><br>
+          PCS: <mark>4</mark> (cartons) &nbsp; WT: <mark>96.0 kg</mark> &nbsp; DATE: <mark>25-09-2026</mark>
+        </div>
+        <p class="muted" style="font-size:12px;margin:8px 0 0">Sample slip. Tracking number and details are made up.</p>
+      </div>
+    </div>
+    <div class="panel">
+      <h4>Verification</h4>
+      <div class="check"><span class="dot d-ok"></span><div>Tracking number valid, not used in any other deal</div><span class="pill p-ok">Pass</span></div>
+      <div class="check"><span class="dot d-ok"></span><div>Consignee ≈ "Nirmal Traders" (buyer)</div><span class="pill p-ok">Pass</span></div>
+      <div class="check"><span class="dot d-ok"></span><div>From 560058 (seller) → to 141003 (agreed address)</div><span class="pill p-ok">Pass</span></div>
+      <div class="check"><span class="dot d-ok"></span><div>96 kg for 40 laptops is within expected range<br><span class="muted">Expected 80–120 kg</span></div><span class="pill p-ok">Pass</span></div>
+      <div class="check"><span class="dot d-ok"></span><div>E-invoice number and e-way bill checked</div><span class="pill p-ok">Pass</span></div>
+      <div class="check"><span class="dot d-ok"></span><div>Courier: picked up 25 Sep → <b>Delivered 1 Oct, 14:05</b><br><span class="muted">Proof of delivery: signed by R. Singh. 1 day after the agreed delivery date.</span></div><span class="pill p-warn">1 day late</span></div>
+      <div class="clock"><span class="big">2d 18h</span><span class="muted">left for buyer to inspect · silence = accepted</span></div>
+    </div>
+  </div>
+</div>
+</template>
+
+<template id="sc5">
+<div class="screen">
+  <h3>Outcome and payout</h3>
+  <p class="muted" style="font-size:13.5px">Pick an outcome. Every one was agreed and checked before the deal was signed. Payouts always add up to the ₹18,44,600 deposit.</p>
+  <div class="select" id="outSel"></div>
+  <p id="outNote" style="font-size:13.5px"></p>
+  <div class="tbl"><table>
+    <thead><tr><th>Payout</th><th>How it's calculated</th><th class="num">Amount (₹)</th><th>Status</th></tr></thead>
+    <tbody id="outBody"></tbody>
+  </table></div>
+  <div class="foot"><span class="muted" style="font-size:12.5px">All payouts wait out a 24h objection window, then go as one-time bank instructions.</span><button class="btn ghost" type="button" id="raiseDispute">Dispute 2 units instead</button></div>
+</div>
+</template>
+
+<script>
+(function(){
+  // tabs
+  var tabs=[["t-spec","p-spec"],["t-mock","p-mock"]];
+  tabs.forEach(function(t){document.getElementById(t[0]).addEventListener("click",function(){
+    tabs.forEach(function(u){var on=u[0]===t[0];document.getElementById(u[0]).setAttribute("aria-selected",on);document.getElementById(u[1]).hidden=!on;});
+    try{localStorage.setItem("excro-tab",t[0])}catch(e){}
+  });});
+  try{var saved=localStorage.getItem("excro-tab");if(saved==="t-mock")document.getElementById("t-mock").click();}catch(e){}
+
+  var fmt=function(n){return n.toLocaleString("en-IN")};
+  var steps=[["scP","Parties"],["sc0","Start"],["sc1","Extract"],["sc2","Playbook"],["sc3","Fund"],["sc4","Deliver"],["sc5","Release"]];
+  var statusTxt=['<span class="pill p-hold">Setup</span>','<span class="pill p-hold">New</span>','<span class="pill p-hold">Draft</span>','<span class="pill p-warn">In review</span>','<span class="pill p-acc">Funded</span>','<span class="pill p-acc">Inspecting</span>','<span class="pill p-ok">Release pending</span>'];
+  var cur=0, stepper=document.getElementById("stepper"), host=document.getElementById("screens");
+
+  var scenarios=[
+    {t:"Buyer says nothing after delivery",d:"Accepted automatically when the inspection window ends. Reminders at 48h and 24h before.",p:[["Window (days)",3]]},
+    {t:"Seller misses dispatch deadline",d:"Buyer may cancel for a full refund. One extension if both agree.",p:[["Extension (days)",3]]},
+    {t:"Lost in transit / returned to seller by courier",d:"Seller re-ships within the window, or the buyer gets a full refund. Seller carries transit risk.",p:[["Re-ship (days)",4]]},
+    {t:"Some units rejected",d:"Accepted units × ₹46,000 released to seller; rejected units' value held until they are returned (buyer pays return shipping).",p:[["Return (days)",5]]},
+    {t:"Late delivery",d:"Penalty per day late, taken from the seller's payout and paid to the buyer.",p:[["% / day",0.5],["Cap %",5]]}
+  ];
+  var acc=scenarios.map(function(){return {b:false,s:false}});
+
+  var outcomes={
+    full:{l:"Full acceptance",n:"All 40 units accepted, delivered on time.",rows:[["Seller: Kavya Electronics","₹18,40,000 − ₹4,600 seller fee share",1835400,"ok"],["Buyer refund","—",0,"ok"],["Excro fee","0.5% of deal value incl. GST",9200,"ok"]]},
+    silent:{l:"Buyer says nothing",n:"Inspection window ended with no response, so the goods count as accepted. 1 day late, so the late-delivery penalty applies.",rows:[["Seller: Kavya Electronics","₹18,40,000 − ₹9,200 penalty − ₹4,600 fee",1826200,"ok"],["Buyer: late-delivery penalty","0.5% × 1 day × ₹18,40,000",9200,"ok"],["Excro fee","0.5% of deal value",9200,"ok"]]},
+    partial:{l:"38 accepted, 2 rejected",n:"Buyer rejected 2 units with photos; returned and received back by seller. 1 day late.",rows:[["Seller: Kavya Electronics","38 × ₹46,000 = ₹17,48,000 − ₹8,740 penalty − ₹4,600 fee",1734660,"ok"],["Buyer refund: rejected units","2 × ₹46,000, after the return is delivered to the seller",92000,"hold"],["Buyer: late-delivery penalty","0.5% × 1 day × ₹17,48,000",8740,"ok"],["Excro fee","0.5% of deal value",9200,"ok"]]},
+    dispute:{l:"Dispute on 2 units",n:"Seller contests the rejection of 2 units. Only ₹92,000 is frozen; everything else moves.",rows:[["Seller: Kavya Electronics","Undisputed 38 units, less penalty and fee",1734660,"ok"],["Frozen pending settlement","2 × ₹46,000, released per signed settlement or arbitration award",92000,"bad"],["Buyer: late-delivery penalty","0.5% × 1 day × ₹17,48,000",8740,"ok"],["Excro fee","0.5% of deal value",9200,"ok"]]},
+    noship:{l:"Seller never ships",n:"Dispatch deadline and extension both missed. Buyer cancelled.",rows:[["Buyer refund","Full deposit including fee",1844600,"ok"],["Seller","—",0,"ok"],["Excro fee","Waived on the escrow; charged to the seller outside it",0,"ok"]]},
+    lost:{l:"Lost in transit",n:"Courier marked the shipment lost; seller didn't re-ship in time.",rows:[["Buyer refund","Full deposit including fee",1844600,"ok"],["Seller","Claims from courier directly",0,"ok"],["Excro fee","Waived on the escrow",0,"ok"]]},
+    bcancel:{l:"Buyer cancels before dispatch",n:"Buyer cancelled after funding, before dispatch.",rows:[["Seller: cancellation fee","2% × ₹18,40,000",36800,"ok"],["Excro fee","Buyer's share kept",4600,"ok"],["Buyer refund","₹18,44,600 − ₹36,800 − ₹4,600",1803200,"ok"]]}
+  };
+  var outKey="partial";
+
+  function renderStepper(){
+    stepper.innerHTML="";
+    steps.forEach(function(s,i){var b=document.createElement("button");b.type="button";b.innerHTML='<span class="n">'+(i+1)+'</span>'+s[1];if(i===cur)b.setAttribute("aria-current","step");b.onclick=function(){cur=i;render();};stepper.appendChild(b);});
+  }
+  function render(){
+    renderStepper();
+    host.innerHTML="";
+    host.appendChild(document.getElementById(steps[cur][0]).content.cloneNode(true));
+    document.getElementById("status").innerHTML=statusTxt[cur];
+    var foot=document.createElement("div");foot.className="foot";foot.style.padding="0 18px 18px";
+    foot.innerHTML=(cur>0?'<button class="btn ghost" type="button" id="prevB">← Back</button>':'<span></span>')+(cur<steps.length-1?'<button class="btn" type="button" id="nextB">Next: '+steps[cur+1][1]+' →</button>':'');
+    host.appendChild(foot);
+    var p=document.getElementById("prevB"),n=document.getElementById("nextB");
+    if(p)p.onclick=function(){cur--;render();}; if(n)n.onclick=function(){cur++;render();};
+    if(cur===3)renderScn(); if(cur===6)renderOut();
+  }
+  function renderScn(){
+    var list=document.getElementById("scnList");list.innerHTML="";
+    scenarios.forEach(function(s,i){
+      var d=document.createElement("div");d.className="scn";
+      var params=s.p.map(function(p,j){return '<label class="param" for="p'+i+'_'+j+'">'+p[0]+' <input id="p'+i+'_'+j+'" type="number" step="any" value="'+p[1]+'"></label>';}).join("");
+      d.innerHTML='<div class="scn-h"><b>'+s.t+'</b><span class="pill p-acc">Library clause</span></div><p>'+s.d+'</p><div class="params">'+params+'</div><div class="acc"><button type="button" data-w="b" aria-pressed="'+acc[i].b+'">Buyer accepts</button><button type="button" data-w="s" aria-pressed="'+acc[i].s+'">Seller accepts</button></div>';
+      d.querySelectorAll(".acc button").forEach(function(b){b.onclick=function(){var w=b.dataset.w;acc[i][w]=!acc[i][w];b.setAttribute("aria-pressed",acc[i][w]);updAcc();};});
+      d.querySelectorAll("input").forEach(function(inp,j){inp.oninput=function(){s.p[j][1]=inp.value;acc[i]={b:false,s:false};d.querySelectorAll(".acc button").forEach(function(b){b.setAttribute("aria-pressed","false")});updAcc();};});
+      list.appendChild(d);
+    });
+    updAcc();
+  }
+  function updAcc(){
+    var b=acc.filter(function(a){return a.b}).length,s=acc.filter(function(a){return a.s}).length;
+    document.getElementById("accB").textContent=b+" / "+acc.length+" accepted";
+    document.getElementById("accS").textContent=s+" / "+acc.length+" accepted";
+    var pr=document.getElementById("prog");pr.innerHTML="";
+    for(var i=0;i<acc.length*2;i++){var el=document.createElement("i");if(i<b+s)el.className="on";pr.appendChild(el);}
+    var btn=document.getElementById("signBtn");btn.disabled=!(b===acc.length&&s===acc.length);
+    btn.onclick=function(){btn.textContent="Signed · fingerprint 9f3a…c21e";btn.disabled=true;};
+  }
+  function renderOut(){
+    var sel=document.getElementById("outSel");sel.innerHTML="";
+    Object.keys(outcomes).forEach(function(k){var b=document.createElement("button");b.type="button";b.textContent=outcomes[k].l;b.setAttribute("aria-pressed",k===outKey);b.onclick=function(){outKey=k;renderOut();};sel.appendChild(b);});
+    var o=outcomes[outKey];document.getElementById("outNote").textContent=o.n;
+    var tb=document.getElementById("outBody"),tot=0,pill={ok:'<span class="pill p-ok">Queued</span>',hold:'<span class="pill p-hold">After return</span>',bad:'<span class="pill p-bad">Frozen</span>'};
+    tb.innerHTML=o.rows.map(function(r){tot+=r[2];return '<tr><td><b>'+r[0]+'</b></td><td class="muted">'+r[1]+'</td><td class="num">'+fmt(r[2])+'</td><td>'+(r[2]?pill[r[3]]:'—')+'</td></tr>';}).join("")+
+      '<tr class="total"><td>Total</td><td>Must equal deposit ₹18,44,600</td><td class="num">'+fmt(tot)+'</td><td>'+(tot===1844600?'<span class="pill p-ok">Balanced</span>':'<span class="pill p-bad">Mismatch</span>')+'</td></tr>';
+    var rd=document.getElementById("raiseDispute");rd.hidden=outKey==="dispute";rd.onclick=function(){outKey="dispute";renderOut();};
+  }
+  render();
+})();
+</script>

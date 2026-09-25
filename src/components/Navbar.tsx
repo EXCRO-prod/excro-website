@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { BlogDropdown } from "@/components/BlogDropdown";
 import { Logo } from "@/components/ui/Logo";
 import { ServicesDropdown } from "@/components/ServicesDropdown";
 import { motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { LogIn, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -78,6 +79,14 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <ThemeToggle />
+          <Link
+            href="/app"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-light-blue/50"
+          >
+            <LogIn size={16} />
+            Excro Login
+          </Link>
           {/* <Button variant="ghost" size="sm" href="/contact">
             Talk to an Expert
           </Button> */}
@@ -86,14 +95,17 @@ export function Navbar() {
           </Button>
         </div>
 
-        <button
-          type="button"
-          className="rounded-lg p-2 text-foreground lg:hidden"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            className="rounded-lg p-2 text-foreground lg:hidden"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {mobileOpen && (
@@ -127,6 +139,13 @@ export function Navbar() {
               Contact
             </Link>
             <div className="mt-4 flex flex-col gap-3">
+              <Link
+                href="/app"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-light-blue px-6 py-3 text-sm font-semibold text-primary transition-colors hover:bg-blue-100"
+              >
+                <LogIn size={16} />
+                Excro Login
+              </Link>
               <Button variant="outline" href="/contact">
                 Talk to an Expert
               </Button>

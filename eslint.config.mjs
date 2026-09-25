@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The escrow platform is its own project with its own tooling and tests.
+    "escrow/**",
   ]),
 ]);
 
