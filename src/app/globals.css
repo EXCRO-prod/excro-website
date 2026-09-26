@@ -67,6 +67,146 @@ body {
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
+/* ---------------------------------------------------------------------------------------------
+   Liquid glass (after Apple's WWDC25 material). A frosted, saturated backdrop with a bright
+   specular top edge, a light rim that fades around the shape, and a soft glare that follows the
+   pointer (set --glare-x / --glare-y from JS; defaults to the top-left).
+   In @layer components so utilities (rounded-*, p-*, etc.) still override it.
+     .liquid-glass          clear glass: navbar, cards, menus
+     .liquid-glass-tinted   brand-blue glass: primary buttons
+     .liquid-glass-hover    brighter rim + lift on hover
+   --------------------------------------------------------------------------------------------- */
+@layer components {
+  .liquid-glass {
+    --lg-tint: 255 255 255;
+    --lg-alpha: 0.5;
+    --lg-rim: 255 255 255;
+    --lg-rim-alpha: 0.95;
+    --lg-edge: 15 23 42;
+    --lg-glare: 0.55;
+    position: relative;
+    isolation: isolate;
+    background:
+      linear-gradient(
+        135deg,
+        rgb(255 255 255 / 0.4) 0%,
+        rgb(255 255 255 / 0.08) 45%,
+        rgb(255 255 255 / 0) 60%,
+        rgb(255 255 255 / 0.22) 100%
+      ),
+      rgb(var(--lg-tint) / var(--lg-alpha));
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+      /* specular top edge and the thickness of the glass along the bottom */
+      inset 0 1px 1px rgb(255 255 255 / 0.85),
+      inset 0 -1px 1px rgb(255 255 255 / 0.3),
+      inset 0 -10px 20px -12px rgb(var(--lg-edge) / 0.08),
+      /* hairline so the shape still reads on white surfaces */
+      0 0 0 1px rgb(var(--lg-edge) / 0.06),
+      0 1px 2px rgb(var(--lg-edge) / 0.05),
+      0 12px 32px -10px rgb(var(--lg-edge) / 0.16);
+    transition:
+      box-shadow 0.3s ease,
+      background-color 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  /* Rim light: bright on the top-left and bottom-right, clear on the sides. */
+  .liquid-glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      150deg,
+      rgb(var(--lg-rim) / var(--lg-rim-alpha)) 0%,
+      rgb(var(--lg-rim) / 0.15) 30%,
+      rgb(var(--lg-rim) / 0) 55%,
+      rgb(var(--lg-rim) / 0.2) 80%,
+      rgb(var(--lg-rim) / 0.7) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    pointer-events: none;
+  }
+
+  /* Glare: a soft light spot inside the glass. */
+  .liquid-glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at var(--glare-x, 18%) var(--glare-y, 0%),
+      rgb(255 255 255 / var(--lg-glare)) 0%,
+      rgb(255 255 255 / 0) 55%
+    );
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .liquid-glass-tinted {
+    --lg-tint: 37 99 235;
+    --lg-alpha: 0.88;
+    --lg-edge: 37 99 235;
+    --lg-glare: 0.4;
+    color: #fff;
+    box-shadow:
+      inset 0 1px 1px rgb(255 255 255 / 0.55),
+      inset 0 -1px 1px rgb(255 255 255 / 0.2),
+      inset 0 -10px 18px -10px rgb(15 23 42 / 0.25),
+      0 1px 2px rgb(37 99 235 / 0.2),
+      0 10px 28px -8px rgb(37 99 235 / 0.5);
+  }
+  .liquid-glass-tinted:hover {
+    --lg-alpha: 0.95;
+  }
+
+  .liquid-glass-hover:hover {
+    --lg-rim-alpha: 1;
+    box-shadow:
+      inset 0 1px 1px rgb(255 255 255 / 0.95),
+      inset 0 -1px 1px rgb(255 255 255 / 0.35),
+      inset 0 -10px 20px -12px rgb(var(--lg-edge) / 0.08),
+      0 0 0 1px rgb(var(--lg-edge) / 0.08),
+      0 2px 4px rgb(var(--lg-edge) / 0.06),
+      0 20px 44px -12px rgb(37 99 235 / 0.22);
+  }
+  .liquid-glass-hover:hover::after {
+    opacity: 1;
+  }
+  .liquid-glass-tinted.liquid-glass-hover:hover {
+    box-shadow:
+      inset 0 1px 1px rgb(255 255 255 / 0.65),
+      inset 0 -1px 1px rgb(255 255 255 / 0.25),
+      inset 0 -10px 18px -10px rgb(15 23 42 / 0.25),
+      0 2px 4px rgb(37 99 235 / 0.25),
+      0 16px 36px -8px rgb(37 99 235 / 0.6);
+  }
+}
+
+/* Without backdrop-filter, or when the user asks for less transparency, fall back to a near-solid fill. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .liquid-glass { --lg-alpha: 0.92; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .liquid-glass {
+    --lg-alpha: 0.96;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
 .card-shadow {
   box-shadow:
     0 1px 2px rgba(15, 23, 42, 0.04),
@@ -251,6 +391,42 @@ body {
   background: rgba(11, 17, 32, 0.78);
   border-color: rgba(39, 52, 73, 0.8);
 }
+[data-theme="dark"] .liquid-glass {
+  --lg-tint: 22 32 56;
+  --lg-alpha: 0.5;
+  --lg-rim-alpha: 0.45;
+  --lg-edge: 0 0 0;
+  --lg-glare: 0.12;
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.18),
+    inset 0 -1px 1px rgb(255 255 255 / 0.06),
+    0 0 0 1px rgb(255 255 255 / 0.06),
+    0 12px 32px -10px rgb(0 0 0 / 0.55);
+}
+[data-theme="dark"] .liquid-glass-hover:hover {
+  --lg-rim-alpha: 0.6;
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.24),
+    inset 0 -1px 1px rgb(255 255 255 / 0.08),
+    0 0 0 1px rgb(255 255 255 / 0.1),
+    0 20px 44px -12px rgb(59 130 246 / 0.3);
+}
+[data-theme="dark"] .liquid-glass-tinted {
+  --lg-tint: 59 130 246;
+  --lg-alpha: 0.82;
+  --lg-rim-alpha: 0.7;
+  --lg-glare: 0.3;
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.45),
+    inset 0 -10px 18px -10px rgb(0 0 0 / 0.3),
+    0 10px 28px -8px rgb(59 130 246 / 0.45);
+}
+[data-theme="dark"] .liquid-glass-tinted.liquid-glass-hover:hover {
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.55),
+    inset 0 -10px 18px -10px rgb(0 0 0 / 0.3),
+    0 16px 36px -8px rgb(59 130 246 / 0.55);
+}
 [data-theme="dark"] .card-shadow { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35); }
 [data-theme="dark"] .card-shadow-hover { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(59, 130, 246, 0.2); }
 [data-theme="dark"] .hero-grid {
@@ -270,3 +446,23 @@ body {
 [data-theme="dark"] .bg-blue-100\/25,
 [data-theme="dark"] .bg-blue-200\/30,
 [data-theme="dark"] .bg-indigo-200\/25 { background-color: rgb(59 130 246 / 0.12); }
+
+/* Clear glass on the blue brand bands (Button variant="inverse"). Unlayered and after the dark
+   block so it wins in both themes: the band is blue either way. */
+.liquid-glass.liquid-glass-inverse {
+  --lg-tint: 255 255 255;
+  --lg-alpha: 0.12;
+  --lg-rim-alpha: 0.8;
+  --lg-edge: 15 23 42;
+  --lg-glare: 0.3;
+  color: #fff;
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.5),
+    inset 0 -1px 1px rgb(255 255 255 / 0.15),
+    0 10px 28px -10px rgb(15 23 42 / 0.3);
+}
+.liquid-glass.liquid-glass-inverse:hover { --lg-alpha: 0.2; }
+
+/* Glass nested inside other glass (navbar dropdowns) can't blur the page behind its parent, so it
+   needs a near-opaque fill to stay readable. */
+.liquid-glass.liquid-glass-solid { --lg-alpha: 0.92; }

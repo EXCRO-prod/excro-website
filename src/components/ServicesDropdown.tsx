@@ -164,7 +164,7 @@ export function ServicesDropdown({ variant = "desktop", onNavigate }: ServicesDr
             transition={{ duration: 0.2 }}
             className="absolute left-1/2 top-full z-50 mt-3 w-[520px] -translate-x-1/2"
           >
-            <div className="card-shadow overflow-hidden rounded-2xl border border-slate-100 bg-white p-2">
+            <div className="liquid-glass liquid-glass-solid overflow-hidden rounded-3xl p-2">
               <div className="grid grid-cols-2 gap-1 p-2">
                 {SERVICE_NAV_ITEMS.map((item) => {
                   const Icon = ICON_MAP[item.icon] || Cloud;
@@ -174,7 +174,7 @@ export function ServicesDropdown({ variant = "desktop", onNavigate }: ServicesDr
                       href={item.href}
                       scroll={true}
                       onClick={handleLinkClick}
-                      className="group flex gap-3 rounded-xl p-3 transition-colors hover:bg-light-blue/60"
+                      className="group flex gap-3 rounded-2xl p-3 transition-colors hover:bg-white/60 dark:hover:bg-white/5"
                     >
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-light-blue transition-colors group-hover:bg-primary">
                         <Icon className="h-5 w-5 text-primary transition-colors group-hover:text-white" />
@@ -190,12 +190,12 @@ export function ServicesDropdown({ variant = "desktop", onNavigate }: ServicesDr
                 })}
               </div>
 
-              <div className="border-t border-slate-100 p-2">
+              <div className="border-t border-slate-200/60 p-2">
                 <Link
                   href="/our-services"
                   scroll={true}
                   onClick={handleLinkClick}
-                  className="flex items-center justify-between rounded-xl bg-light-blue/50 px-4 py-3 text-sm font-semibold text-primary transition-colors hover:bg-light-blue"
+                  className="flex items-center justify-between rounded-2xl bg-light-blue/50 px-4 py-3 text-sm font-semibold text-primary transition-colors hover:bg-light-blue"
                 >
                   View All Services
                   <ArrowRight className="h-4 w-4" />

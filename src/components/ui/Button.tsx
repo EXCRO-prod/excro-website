@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { type ReactNode } from "react";
+import { resetGlare, trackGlare } from "@/components/ui/glare";
 
 interface ButtonProps {
   children: ReactNode;
@@ -15,11 +16,11 @@ interface ButtonProps {
 }
 
 const variants = {
-  primary: "bg-primary text-white hover:bg-secondary shadow-lg shadow-primary/25",
-  secondary: "bg-light-blue text-primary hover:bg-blue-100",
-  outline: "border border-slate-200 bg-white text-foreground hover:border-primary/30 hover:bg-light-blue/50",
+  primary: "liquid-glass liquid-glass-tinted liquid-glass-hover",
+  secondary: "liquid-glass liquid-glass-hover text-primary",
+  outline: "liquid-glass liquid-glass-hover text-foreground hover:text-primary",
   ghost: "text-muted hover:text-primary hover:bg-light-blue/50",
-  inverse: "border border-white/40 bg-white/10 text-white hover:border-white/70 hover:bg-white/20 hover:text-white",
+  inverse: "liquid-glass liquid-glass-inverse liquid-glass-hover",
   whatsapp: "bg-[#25D366] text-white hover:bg-[#1ebe57] shadow-lg shadow-[#25D366]/30",
 };
 
@@ -38,7 +39,7 @@ export function Button({
   className = "",
   type = "button",
 }: ButtonProps) {
-  const classes = `inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors ${variants[variant]} ${sizes[size]} ${className}`;
+  const classes = `inline-flex items-center justify-center gap-2 rounded-full font-semibold transition ${variants[variant]} ${sizes[size]} ${className}`;
 
   if (href) {
     const isExternal = href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:");
@@ -50,6 +51,8 @@ export function Button({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className={classes}
+          onPointerMove={trackGlare}
+          onPointerLeave={resetGlare}
           target={href.startsWith("http") ? "_blank" : undefined}
           rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
         >
@@ -60,7 +63,7 @@ export function Button({
 
     return (
       <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="inline-flex">
-        <Link href={href} scroll={true} className={classes}>
+        <Link href={href} scroll={true} className={classes} onPointerMove={trackGlare} onPointerLeave={resetGlare}>
           {children}
         </Link>
       </motion.div>
@@ -71,6 +74,8 @@ export function Button({
     <motion.button
       type={type}
       onClick={onClick}
+      onPointerMove={trackGlare}
+      onPointerLeave={resetGlare}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className={classes}

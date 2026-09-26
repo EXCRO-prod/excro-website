@@ -44,7 +44,7 @@ export function FinalCTA() {
                   variant="secondary"
                   size="lg"
                   href="/contact"
-                  className="bg-white text-primary shadow-lg hover:bg-blue-50"
+                  className="bg-white text-primary hover:bg-blue-50"
                 >
                   Book Demo
                   <ArrowRight className="h-4 w-4" />
